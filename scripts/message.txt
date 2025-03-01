@@ -1,3 +1,4 @@
-feat(project): updating the README and adding the folder structure
+feat(project): Schema for the database
 
-Setting up the foundation for the Special Topics project.
+Schema of the database 
+in supabase.
