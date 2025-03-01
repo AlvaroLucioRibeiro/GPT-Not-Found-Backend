@@ -1,5 +1,5 @@
-docs(project): Documentation of backend
+feat(project): Create Tables in database
 
-Initial proposal for 
-backend. Tables, relationships
-and routes.
+Commands to create tables and 
+relationships in database. Considering
+supabase as the database.

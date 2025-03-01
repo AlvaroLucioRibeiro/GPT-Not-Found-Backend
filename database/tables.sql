@@ -1,95 +1,105 @@
--- Criar os tipos ENUM manualmente antes de usá-los
-CREATE TYPE tipo_usuario AS ENUM ('cliente', 'admin');
-CREATE TYPE tipo_evento AS ENUM ('casamento', 'corporativo', 'debutante', 'outro');
-CREATE TYPE status_pedido AS ENUM ('pendente', 'pago', 'cancelado');
-CREATE TYPE tipo_produto AS ENUM ('bebida', 'estrutura', 'serviço');
-CREATE TYPE metodo_pagamento AS ENUM ('cartao_credito', 'pix', 'boleto', 'transferencia');
-CREATE TYPE status_pagamento AS ENUM ('pendente', 'aprovado', 'rejeitado');
+-- Criar os tipos ENUM manualmente
+CREATE TYPE user_type AS ENUM ('customer', 'admin');
+CREATE TYPE event_type AS ENUM ('wedding', 'corporate', 'debutante', 'other');
+CREATE TYPE order_status AS ENUM ('pending', 'paid', 'canceled');
+CREATE TYPE product_type AS ENUM ('drink', 'structure', 'service');
+CREATE TYPE payment_method AS ENUM ('credit_card', 'pix', 'boleto', 'bank_transfer');
+CREATE TYPE payment_status AS ENUM ('pending', 'approved', 'rejected');
 
--- Tabela de Clientes
-CREATE TABLE clientes (
+-- Tabela de Clientes (Customers)
+CREATE TABLE customers (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    telefone VARCHAR(20),
-    endereco TEXT,
+    phone VARCHAR(20),
+    address TEXT,
     cpf_cnpj VARCHAR(20) UNIQUE NOT NULL,
-    senha_hash VARCHAR(255) NOT NULL,
-    tipo tipo_usuario DEFAULT 'cliente' NOT NULL
+    password_hash VARCHAR(255) NOT NULL,
+    role user_type DEFAULT 'customer' NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
--- Tabela de Eventos
-CREATE TABLE eventos (
+-- Tabela de Eventos (Events)
+CREATE TABLE events (
     id SERIAL PRIMARY KEY,
-    cliente_id INT NOT NULL,
-    tipo tipo_evento NOT NULL,
-    data TIMESTAMP NOT NULL,
-    local VARCHAR(255) NOT NULL,
-    numero_convidados INT NOT NULL,
-    duracao_horas INT NOT NULL,
-    orcamento_aprovado BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE
+    customer_id INT NOT NULL,
+    event_type event_type NOT NULL,
+    event_date TIMESTAMP NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    guest_count INT NOT NULL,
+    duration_hours INT NOT NULL,
+    budget_approved BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
 );
 
--- Tabela de Pedidos
-CREATE TABLE pedidos (
+-- Tabela de Pedidos (Orders)
+CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
-    evento_id INT NOT NULL,
-    data_pedido TIMESTAMP NOT NULL,
-    valor_total DECIMAL(10,2) NOT NULL,
-    status status_pedido DEFAULT 'pendente' NOT NULL,
-    FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE
+    event_id INT NOT NULL,
+    order_date TIMESTAMP NOT NULL DEFAULT NOW(),
+    total_amount DECIMAL(10,2) NOT NULL,
+    status order_status DEFAULT 'pending' NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
 
--- Tabela de Produtos
-CREATE TABLE produtos (
+-- Tabela de Produtos (Products)
+CREATE TABLE products (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    descricao TEXT,
-    preco_base DECIMAL(10,2) NOT NULL,
-    tipo tipo_produto NOT NULL,
-    ativo BOOLEAN DEFAULT TRUE
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    base_price DECIMAL(10,2) NOT NULL,
+    category product_type NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
--- Tabela de Itens do Pedido
-CREATE TABLE itens_pedido (
+-- Tabela de Itens do Pedido (Order_Items)
+CREATE TABLE order_items (
     id SERIAL PRIMARY KEY,
-    pedido_id INT NOT NULL,
-    produto_id INT NOT NULL,
-    quantidade INT NOT NULL,
-    preco_unitario DECIMAL(10,2) NOT NULL,
-    total DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
-    FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE CASCADE
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL,
+    total_price DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- Tabela de Pagamentos
-CREATE TABLE pagamentos (
+-- Tabela de Pagamentos (Payments)
+CREATE TABLE payments (
     id SERIAL PRIMARY KEY,
-    pedido_id INT NOT NULL,
-    valor DECIMAL(10,2) NOT NULL,
-    metodo_pagamento metodo_pagamento NOT NULL,
-    status status_pagamento DEFAULT 'pendente' NOT NULL,
-    data_pagamento TIMESTAMP,
-    FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE
+    order_id INT NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    payment_method payment_method NOT NULL,
+    status payment_status DEFAULT 'pending' NOT NULL,
+    payment_date TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
--- Tabela de Notas Fiscais
-CREATE TABLE notas_fiscais (
+-- Tabela de Notas Fiscais (Invoices)
+CREATE TABLE invoices (
     id SERIAL PRIMARY KEY,
-    pedido_id INT NOT NULL,
-    numero_nota VARCHAR(50) UNIQUE NOT NULL,
-    data_emissao TIMESTAMP NOT NULL,
-    valor_total DECIMAL(10,2) NOT NULL,
-    arquivo_pdf VARCHAR(255),
-    FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE
+    order_id INT NOT NULL,
+    invoice_number VARCHAR(50) UNIQUE NOT NULL,
+    issue_date TIMESTAMP NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    pdf_file VARCHAR(255),
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
--- Tabela de Contratos
-CREATE TABLE contratos (
+-- Tabela de Contratos (Contracts)
+CREATE TABLE contracts (
     id SERIAL PRIMARY KEY,
-    evento_id INT NOT NULL,
-    data_criacao TIMESTAMP NOT NULL,
-    arquivo_pdf VARCHAR(255),
-    FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE
+    event_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    pdf_file VARCHAR(255),
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
