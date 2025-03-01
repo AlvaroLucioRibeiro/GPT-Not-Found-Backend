@@ -1,6 +1,6 @@
-feat(project): Commands to drop database
+docs(project): Documentation of backend
 
-If it necessary to drop
-tables, relationships or
-enums in database these
-Commands can be used.
+Documentation dedicated to 
+explain tables, relationships
+and routes of the backend
+aplication.

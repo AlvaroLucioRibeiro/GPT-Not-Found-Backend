@@ -1,190 +1,198 @@
-# 📌 Proposta para Backend - Elo Drinks
+# 📌 Backend Proposal - Elo Drinks
 
-## 📖 Visão Geral
-Este documento detalha a estrutura do banco de dados, os relacionamentos entre as tabelas e as rotas da API para a aplicação da **Elo Drinks**. O objetivo é criar um sistema eficiente para gerenciar eventos, pedidos, clientes, pagamentos e documentos fiscais.
+## 📖 Overview
+This document details the database structure, table relationships, and API routes for the **Elo Drinks** application. The goal is to create an efficient system to manage events, orders, customers, payments, and invoices.
 
 ---
 
-## 📊 Estrutura do Banco de Dados
+## 📊 Database Structure
 
-Abaixo está a estrutura completa das tabelas e seus relacionamentos.
+Below is the complete structure of the tables and their relationships.
 
-### **1. Clientes (`clientes`)**
-Guarda informações dos clientes e administradores.
+### **1. Customers (`customers`)**
+Stores information about customers and administrators.
 
-| Campo          | Tipo              | Descrição |
+| Field          | Type              | Description |
 |---------------|------------------|-----------|
-| `id`         | INT (PK) AUTO_INCREMENT | Identificador único do cliente |
-| `nome`       | VARCHAR(255) | Nome completo do cliente |
-| `email`      | VARCHAR(255) UNIQUE | E-mail do cliente (usado para login) |
-| `telefone`   | VARCHAR(20) | Telefone de contato |
-| `endereco`   | TEXT | Endereço completo |
-| `cpf_cnpj`   | VARCHAR(20) UNIQUE | Documento do cliente |
-| `senha_hash` | VARCHAR(255) | Senha criptografada (usando bcrypt) |
-| `tipo`       | ENUM('cliente', 'admin') DEFAULT 'cliente' | Indica se o usuário é cliente ou administrador |
+| `id`         | SERIAL PRIMARY KEY | Unique customer identifier |
+| `full_name`  | VARCHAR(255) NOT NULL | Full name of the customer |
+| `email`      | VARCHAR(255) UNIQUE NOT NULL | Customer email (used for login) |
+| `phone`      | VARCHAR(20) | Contact phone number |
+| `address`    | TEXT | Full address |
+| `cpf_cnpj`   | VARCHAR(20) UNIQUE NOT NULL | Customer's document number |
+| `password_hash` | VARCHAR(255) NOT NULL | Encrypted password (using bcrypt) |
+| `role`       | user_type DEFAULT 'customer' NOT NULL | Indicates if the user is a customer or an admin |
+| `created_at` | TIMESTAMP DEFAULT NOW() | Record creation timestamp |
+| `updated_at` | TIMESTAMP DEFAULT NOW() | Last update timestamp |
 
-📌 **Relacionamento:**  
-- *1:N* → **Eventos (`eventos`)** → Um cliente pode criar vários eventos.  
-- *1:N* → **Pedidos (`pedidos`)** → Um cliente pode ter vários pedidos.
-
----
-
-### **2. Eventos (`eventos`)**
-Representa os eventos organizados pelos clientes.
-
-| Campo            | Tipo        | Descrição |
-|-----------------|------------|-----------|
-| `id`           | INT (PK) AUTO_INCREMENT | Identificador do evento |
-| `cliente_id`   | INT (FK → clientes.id) | Cliente que criou o evento |
-| `tipo_evento`  | ENUM('casamento', 'corporativo', 'debutante', 'outro') | Tipo do evento |
-| `data`         | DATETIME | Data do evento |
-| `local`        | VARCHAR(255) | Localização do evento |
-| `numero_convidados` | INT | Número de convidados |
-| `duracao_horas` | INT | Tempo de duração do evento |
-| `orcamento_aprovado` | BOOLEAN | Indica se o orçamento foi aprovado |
-
-📌 **Relacionamento:**  
-- *1:N* → **Pedidos (`pedidos`)** → Um evento pode ter vários pedidos.  
-- *1:1* → **Contratos (`contratos`)** → Cada evento pode ter um contrato associado.
+📌 **Relationships:**  
+- *1:N* → **Events (`events`)** → A customer can create multiple events.  
 
 ---
 
-### **3. Pedidos (`pedidos`)**
-Representa os pedidos de serviços e produtos para um evento.
+### **2. Events (`events`)**
+Represents events organized by customers.
 
-| Campo         | Tipo         | Descrição |
+| Field          | Type        | Description |
+|---------------|------------|-----------|
+| `id`         | SERIAL PRIMARY KEY | Unique event identifier |
+| `customer_id`| INT NOT NULL | Customer who created the event |
+| `event_type` | event_type NOT NULL | Type of event (`wedding`, `corporate`, `debutante`, `other`) |
+| `event_date` | TIMESTAMP NOT NULL | Date of the event |
+| `location`   | VARCHAR(255) NOT NULL | Event location |
+| `guest_count`| INT NOT NULL | Number of guests |
+| `duration_hours` | INT NOT NULL | Event duration in hours |
+| `budget_approved` | BOOLEAN DEFAULT FALSE | Indicates whether the budget was approved |
+| `created_at` | TIMESTAMP DEFAULT NOW() | Record creation timestamp |
+| `updated_at` | TIMESTAMP DEFAULT NOW() | Last update timestamp |
+
+📌 **Relationships:**  
+- *1:N* → **Orders (`orders`)** → An event can have multiple orders.  
+- *1:1* → **Contracts (`contracts`)** → Each event can have an associated contract.
+
+---
+
+### **3. Orders (`orders`)**
+Represents service and product orders for an event.
+
+| Field         | Type         | Description |
 |--------------|-------------|-----------|
-| `id`        | INT (PK) AUTO_INCREMENT | Identificador do pedido |
-| `evento_id` | INT (FK → eventos.id) | Evento relacionado ao pedido |
-| `data_pedido` | DATETIME | Data do pedido |
-| `valor_total` | DECIMAL(10,2) | Valor total do pedido |
-| `status` | ENUM('pendente', 'pago', 'cancelado') | Status do pedido |
+| `id`        | SERIAL PRIMARY KEY | Unique order identifier |
+| `event_id`  | INT NOT NULL | Related event |
+| `order_date`| TIMESTAMP DEFAULT NOW() | Order date |
+| `total_amount` | DECIMAL(10,2) NOT NULL | Total order value |
+| `status`    | order_status DEFAULT 'pending' NOT NULL | Order status (`pending`, `paid`, `canceled`) |
+| `created_at` | TIMESTAMP DEFAULT NOW() | Record creation timestamp |
+| `updated_at` | TIMESTAMP DEFAULT NOW() | Last update timestamp |
 
-📌 **Relacionamento:**  
-- *1:N* → **Itens do Pedido (`itens_pedido`)** → Um pedido pode conter vários produtos.  
-- *1:1* → **Pagamentos (`pagamentos`)** → Cada pedido tem um pagamento.  
-- *1:1* → **Nota Fiscal (`notas_fiscais`)** → Cada pedido gera uma nota fiscal.
-
----
-
-### **4. Itens do Pedido (`itens_pedido`)**
-Produtos e serviços adicionados a um pedido.
-
-| Campo        | Tipo         | Descrição |
-|-------------|-------------|-----------|
-| `id`       | INT (PK) AUTO_INCREMENT | Identificador único do item |
-| `pedido_id` | INT (FK → pedidos.id) | Pedido ao qual o item pertence |
-| `produto_id` | INT (FK → produtos.id) | Produto referenciado |
-| `quantidade` | INT | Quantidade do produto solicitado |
-| `preco_unitario` | DECIMAL(10,2) | Preço por unidade |
-| `total` | DECIMAL(10,2) | Preço total do item |
-
-📌 **Relacionamento:**  
-- *N:M* → **Produtos (`produtos`)** → Um produto pode estar em vários pedidos.
+📌 **Relationships:**  
+- *1:N* → **Order Items (`order_items`)** → An order can contain multiple products.  
+- *1:1* → **Payments (`payments`)** → Each order has a payment.  
+- *1:1* → **Invoices (`invoices`)** → Each order generates an invoice.
 
 ---
 
-### **5. Produtos (`produtos`)**
-Bebidas, serviços e itens disponíveis para venda.
+### **4. Order Items (`order_items`)**
+Products and services added to an order.
 
-| Campo       | Tipo        | Descrição |
+| Field       | Type         | Description |
+|------------|-------------|-----------|
+| `id`       | SERIAL PRIMARY KEY | Unique item identifier |
+| `order_id` | INT NOT NULL | Order to which the item belongs |
+| `product_id` | INT NOT NULL | Referenced product |
+| `quantity` | INT NOT NULL | Requested product quantity |
+| `unit_price` | DECIMAL(10,2) NOT NULL | Price per unit |
+| `total_price` | DECIMAL(10,2) NOT NULL | Total item price |
+
+📌 **Relationships:**  
+- *N:M* → **Products (`products`)** → A product can appear in multiple orders.
+
+---
+
+### **5. Products (`products`)**
+Drinks, services, and items available for sale.
+
+| Field       | Type        | Description |
 |------------|------------|-----------|
-| `id`      | INT (PK) AUTO_INCREMENT | Identificador do produto |
-| `nome`    | VARCHAR(255) | Nome do produto |
-| `descricao` | TEXT | Descrição do produto |
-| `preco_base` | DECIMAL(10,2) | Preço base do produto |
-| `tipo` | ENUM('bebida', 'estrutura', 'serviço') | Tipo do item |
-| `ativo` | BOOLEAN | Indica se está disponível para compra |
+| `id`       | SERIAL PRIMARY KEY | Unique product identifier |
+| `name`     | VARCHAR(255) NOT NULL | Product name |
+| `description` | TEXT | Product description |
+| `base_price` | DECIMAL(10,2) NOT NULL | Base product price |
+| `category` | product_type NOT NULL | Item category (`drink`, `structure`, `service`) |
+| `active`   | BOOLEAN DEFAULT TRUE | Indicates whether the product is available for sale |
+| `created_at` | TIMESTAMP DEFAULT NOW() | Record creation timestamp |
+| `updated_at` | TIMESTAMP DEFAULT NOW() | Last update timestamp |
 
-📌 **Relacionamento:**  
-- *N:M* → **Pedidos (`itens_pedido`)** → Um produto pode estar em vários pedidos.
+📌 **Relationships:**  
+- *N:M* → **Orders (`order_items`)** → A product can appear in multiple orders.
 
+---
 
-### **6. Pagamentos (`pagamentos`)**
-Registra pagamentos de pedidos.
+### **6. Payments (`payments`)**
+Records order payments.
 
-| Campo         | Tipo        | Descrição |
+| Field         | Type        | Description |
 |--------------|------------|-----------|
-| `id`        | INT (PK) AUTO_INCREMENT | Identificador do pagamento |
-| `pedido_id` | INT (FK → pedidos.id) | Pedido pago |
-| `valor`     | DECIMAL(10,2) | Valor pago |
-| `metodo_pagamento` | ENUM('cartao_credito', 'pix', 'boleto', 'transferencia') | Método de pagamento |
-| `status` | ENUM('pendente', 'aprovado', 'rejeitado') | Status do pagamento |
-| `data_pagamento` | DATETIME | Data do pagamento |
+| `id`        | SERIAL PRIMARY KEY | Unique payment identifier |
+| `order_id`  | INT NOT NULL | Paid order |
+| `amount`    | DECIMAL(10,2) NOT NULL | Paid amount |
+| `payment_method` | payment_method NOT NULL | Payment method (`credit_card`, `pix`, `boleto`, `bank_transfer`) |
+| `status`    | payment_status DEFAULT 'pending' NOT NULL | Payment status (`pending`, `approved`, `rejected`) |
+| `payment_date` | TIMESTAMP | Payment date |
+| `updated_at` | TIMESTAMP DEFAULT NOW() | Last update timestamp |
 
 ---
 
-### **7. Notas Fiscais (`notas_fiscais`)**
-Armazena as notas fiscais dos pedidos.
+### **7. Invoices (`invoices`)**
+Stores order invoices.
 
-| Campo         | Tipo        | Descrição |
+| Field         | Type        | Description |
 |--------------|------------|-----------|
-| `id`        | INT (PK) AUTO_INCREMENT | Identificador da nota fiscal |
-| `pedido_id` | INT (FK → pedidos.id) | Pedido relacionado |
-| `numero_nota` | VARCHAR(50) UNIQUE | Número da nota fiscal |
-| `data_emissao` | DATETIME | Data de emissão |
-| `valor_total` | DECIMAL(10,2) | Valor total da nota fiscal |
-| `arquivo_pdf` | VARCHAR(255) | Caminho do arquivo PDF |
+| `id`        | SERIAL PRIMARY KEY | Unique invoice identifier |
+| `order_id`  | INT NOT NULL | Related order |
+| `invoice_number` | VARCHAR(50) UNIQUE NOT NULL | Invoice number |
+| `issue_date` | TIMESTAMP NOT NULL | Issue date |
+| `total_amount` | DECIMAL(10,2) NOT NULL | Total invoice value |
+| `pdf_file`  | VARCHAR(255) | File path for PDF invoice |
 
 ---
 
-### **8. Contratos (`contratos`)**
-Contrato gerado para proteção da empresa e do cliente.
+### **8. Contracts (`contracts`)**
+Contract generated for the company's and customer’s protection.
 
-| Campo         | Tipo        | Descrição |
+| Field         | Type        | Description |
 |--------------|------------|-----------|
-| `id`        | INT (PK) AUTO_INCREMENT | Identificador do contrato |
-| `evento_id` | INT (FK → eventos.id) | Evento relacionado |
-| `data_criacao` | DATETIME | Data de criação |
-| `arquivo_pdf` | VARCHAR(255) | Caminho do arquivo PDF |
+| `id`        | SERIAL PRIMARY KEY | Unique contract identifier |
+| `event_id`  | INT NOT NULL | Related event |
+| `created_at` | TIMESTAMP DEFAULT NOW() | Record creation timestamp |
+| `updated_at` | TIMESTAMP DEFAULT NOW() | Last update timestamp |
+| `pdf_file`  | VARCHAR(255) | File path for PDF contract |
 
 ---
 
-## 🔹 Rotas da API
+## 🔹 API Routes
 
-### **🔹 Autenticação**
-- `POST /auth/register` → Registro de cliente
-- `POST /auth/login` → Login (gera JWT Token)
-- `GET /clientes/me` → Retorna dados do usuário logado
+### **🔹 Authentication**
+- `POST /auth/register` → Customer registration
+- `POST /auth/login` → Login (generates JWT Token)
+- `GET /customers/me` → Returns logged-in user data
 
-### **🔹 Clientes**
-- `GET /clientes`
-- `GET /clientes/{id}`
-- `PUT /clientes/{id}`
-- `DELETE /clientes/{id}`
+### **🔹 Customers**
+- `GET /customers`
+- `GET /customers/{id}`
+- `PUT /customers/{id}`
+- `DELETE /customers/{id}`
 
-### **🔹 Eventos**
-- `GET /eventos`
-- `POST /eventos`
-- `GET /eventos/{id}`
-- `PUT /eventos/{id}`
-- `DELETE /eventos/{id}`
+### **🔹 Events**
+- `GET /events`
+- `POST /events`
+- `GET /events/{id}`
+- `PUT /events/{id}`
+- `DELETE /events/{id}`
 
-### **🔹 Pedidos**
-- `GET /pedidos`
-- `POST /pedidos`
-- `GET /pedidos/{id}`
-- `PUT /pedidos/{id}`
-- `DELETE /pedidos/{id}`
+### **🔹 Orders**
+- `GET /orders`
+- `POST /orders`
+- `GET /orders/{id}`
+- `PUT /orders/{id}`
+- `DELETE /orders/{id}`
 
-### **🔹 Produtos**
-- `GET /produtos`
-- `POST /produtos`
-- `GET /produtos/{id}`
-- `PUT /produtos/{id}`
-- `DELETE /produtos/{id}`
+### **🔹 Products**
+- `GET /products`
+- `POST /products`
+- `GET /products/{id}`
+- `PUT /products/{id}`
+- `DELETE /products/{id}`
 
-### **🔹 Pagamentos**
-- `POST /pagamentos`
-- `GET /pagamentos/{id}`
-- `PUT /pagamentos/{id}`
+### **🔹 Payments**
+- `POST /payments`
+- `GET /payments/{id}`
+- `PUT /payments/{id}`
 
-### **🔹 Notas Fiscais**
-- `GET /notas-fiscais/{pedido_id}`
-- `GET /notas-fiscais/download/{nota_id}`
+### **🔹 Invoices**
+- `GET /invoices/{order_id}`
+- `GET /invoices/download/{invoice_id}`
 
-### **🔹 Contratos**
-- `GET /contratos/{evento_id}`
-- `GET /contratos/download/{contrato_id}`
-
----
+### **🔹 Contracts**
+- `GET /contracts/{event_id}`
+- `GET /contracts/download/{contract_id}`
