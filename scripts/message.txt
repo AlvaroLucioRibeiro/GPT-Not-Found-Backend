@@ -1,5 +1,6 @@
-feat(project): Create Tables in database
+feat(project): Commands to drop database
 
-Commands to create tables and 
-relationships in database. Considering
-supabase as the database.
+If it necessary to drop
+tables, relationships or
+enums in database these
+Commands can be used.
