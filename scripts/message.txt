@@ -1,4 +1,5 @@
-feat(project): Schema for the database
+docs(project): Documentation of backend
 
-Schema of the database 
-in supabase.
+Initial proposal for 
+backend. Tables, relationships
+and routes.
