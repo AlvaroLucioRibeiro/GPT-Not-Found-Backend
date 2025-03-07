@@ -1,5 +1,5 @@
 feat(project): Updating .gitignore
 
 Updating .gitignore to
-ignore folder dedicated to
-store python venv.
+ignore file which save
+credentials for database.
