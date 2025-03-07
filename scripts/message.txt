@@ -1,3 +1,6 @@
-feat(project): updating the README and adding the folder structure
+docs(project): Documentation of backend
 
-Setting up the foundation for the Special Topics project.
+Documentation dedicated to 
+explain tables, relationships
+and routes of the backend
+aplication.
