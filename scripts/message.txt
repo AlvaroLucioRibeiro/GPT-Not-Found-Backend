@@ -1,3 +1,5 @@
-feat(project): updating the README and adding the folder structure
+feat(project): Updating .gitignore
 
-Setting up the foundation for the Special Topics project.
+Updating .gitignore to
+ignore folder dedicated to
+store python venv.
