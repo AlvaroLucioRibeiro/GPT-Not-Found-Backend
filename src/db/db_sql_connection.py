@@ -2,10 +2,10 @@ import psycopg2
 import os
 from dotenv import load_dotenv
 
-# Carrega variáveis de ambiente do arquivo .env
+# load variables from .env file
 load_dotenv()
 
-# Variáveis de ambiente para conexão com o banco de dados
+# Variables to connect to the database
 SUPABASE_USER = os.getenv("SUPABASE_USER")
 SUPABASE_PASSWORD = os.getenv("SUPABASE_PASSWORD")
 SUPABASE_HOST = os.getenv("SUPABASE_HOST")
@@ -15,17 +15,17 @@ SUPABASE_DATABASE = os.getenv("SUPABASE_DATABASE")
 
 def connect():
     """
-    Estabelece uma conexão com o banco de dados PostgreSQL.
+    Establishes a connection to the PostgreSQL database.
 
     Returns:
-        connection (psycopg2.extensions.connection): Objeto de conexão com o banco de dados.
+        connection (psycopg2.extensions.connection): Database connection object.
 
     Raises:
-        Exception: Se ocorrer um erro ao conectar ao banco de dados.
+        Exception: If an error occurs while connecting to the database.
 
-    Exemplo:
+    Example:
         >>> conn = connect()
-        Conexão estabelecida com sucesso.
+        Connection established successfully.
     """
     try:
         connection = psycopg2.connect(
@@ -35,8 +35,8 @@ def connect():
             port=SUPABASE_PORT,
             database=SUPABASE_DATABASE,
         )
-        print("Conexão estabelecida com sucesso.")
+        print("Connection established successfully.")
         return connection
     except Exception as e:
-        print(f"Erro ao conectar ao banco de dados: {e}")
+        print(f"Error connecting to the database: {str(e)}")
         raise

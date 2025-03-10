@@ -1,6 +1,6 @@
-feat(project): Updating requirements.txt
+feat(project): Route for authentication register
 
-A new library was added
-to requirements.txt. This
-library is dedicated to
-hash the password.
+Route dedicated for authentication
+register added to the API. Also
+the documentation of the code
+was made.
