@@ -1,6 +1,5 @@
-docs(project): Documentation of backend
+feat(project): Database connection
 
-Documentation dedicated to 
-explain tables, relationships
-and routes of the backend
-aplication.
+Code to connect Database
+and example of how to do 
+a query.
