@@ -1,5 +1,6 @@
-feat(project): Updating .gitignore
+docs(project): Documentation of backend
 
-Updating .gitignore to
-ignore file which save
-credentials for database.
+Documentation dedicated to 
+explain tables, relationships
+and routes of the backend
+aplication.
