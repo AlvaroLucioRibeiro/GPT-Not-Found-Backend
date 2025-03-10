@@ -1,5 +1,4 @@
-feat(project): Database connection
+feat(project): Adding requirements.txt
 
-Code to connect Database
-and example of how to do 
-a query.
+Adding requirements.txt for 
+libraries version control.
