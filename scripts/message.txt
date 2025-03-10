@@ -1,4 +1,6 @@
-feat(project): Adding requirements.txt
+feat(project): Updating requirements.txt
 
-Adding requirements.txt for 
-libraries version control.
+A new library was added
+to requirements.txt. This
+library is dedicated to
+hash the password.
