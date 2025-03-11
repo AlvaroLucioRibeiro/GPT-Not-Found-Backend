@@ -1,6 +1,4 @@
-docs(project): Documentation of backend
+feat(db, utils): Updating requirements.txt
 
-Documentation dedicated to 
-explain tables, relationships
-and routes of the backend
-aplication.
+Updating requirements.txt to 
+work with all libraries correct.
