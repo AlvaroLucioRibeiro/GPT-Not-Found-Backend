@@ -1,6 +1,4 @@
-test(db, utils): add tests for db_class and utils with CPF/CNPJ and email validation
+feat(db, utils): Updating requirements.txt
 
-Added unit tests for `db_class` to validate correct instantiation and missing
-field errors, created tests for `utils`, including CPF/CNPJ and email validation,
-integrated Pydantic modules for better data validation, and added `__init__.py`
-to resolve import issues.
+Updating requirements.txt to 
+work with all libraries correct.
