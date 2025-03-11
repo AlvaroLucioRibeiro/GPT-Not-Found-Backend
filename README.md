@@ -1,6 +1,6 @@
 # C317 - GPT NOT FOUND
 
-![Build Status](https://github.com/AlvaroLucioRibeiro/GPT-Not-Found-Backend/blob/CICD/AR-create_CICD/.github/workflows/Tests.yml/badge.svg)
+![Build Status](https://github.com/AlvaroLucioRibeiro/GPT-Not-Found-Backend/actions/workflows/Tests.yml/badge.svg)
 ![Python](https://img.shields.io/badge/language-Python-yellow)
 ![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)
 
