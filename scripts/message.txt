@@ -1,6 +1,4 @@
-feat(route_authentication): Assing login route
+feat(requirements.txt): Updating requirements.txt
 
-Route dedicated to query in database
-a specific user, considering his 
-username and password. The API return
-the access token using metodology jwt.
+Updating requirements.txt due to warning
+in terminal. Now there is no warning.
