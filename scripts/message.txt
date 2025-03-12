@@ -1,4 +1,4 @@
-feat(requirements.txt): Updating requirements.txt
+feat(route_customers_me): Adding route for customer authentication
 
-Updating requirements.txt due to warning
-in terminal. Now there is no warning.
+A route dedicated to use token for taking data for a logged
+used added.
