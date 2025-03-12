@@ -1,4 +1,6 @@
-feat(db, utils): Updating requirements.txt
+feat(route_authentication): Assing login route
 
-Updating requirements.txt to 
-work with all libraries correct.
+Route dedicated to query in database
+a specific user, considering his 
+username and password. The API return
+the access token using metodology jwt.
