@@ -5,16 +5,16 @@ from db.db_sql_connection import connect
 
 async def get_customer_by_email(email: str) -> Optional[Dict[str, str]]:
     """
-    Recupera um cliente pelo email da tabela customers.
+    Recovery customer data by email
 
     Args:
-        email (str): Email do cliente.
+        email (str): Customer email
 
-    Returns:
-        Optional[Dict[str, str]]: Dicionário contendo os dados do cliente se encontrado, ou None se não existir.
+    return:
+        Optional[Dict[str, str]]: Customer data
 
-    Raises:
-        HTTPException: Se ocorrer um erro na consulta ao banco de dados.
+    exceptions:
+        HTTPException: Database error
     """
     query = "SELECT id, full_name, email, phone, address, cpf_cnpj, password_hash, role FROM customers WHERE email = %s;"
 
@@ -35,6 +35,6 @@ async def get_customer_by_email(email: str) -> Optional[Dict[str, str]]:
                 "password_hash": customer[6],
                 "role": customer[7],
             }
-        return None  # Retorna None caso o email não exista
+        return None
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

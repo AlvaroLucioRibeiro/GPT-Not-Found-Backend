@@ -1,4 +1,5 @@
-feat(route_customers_me): Adding route for customer authentication
+fix(read): Documentation fixxed
 
-A route dedicated to use token for taking data for a logged
-used added.
+Documentation was in 
+portuguese, now it's in
+in english.
