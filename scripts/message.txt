@@ -1,5 +1,7 @@
-fix(read): Documentation fixxed
+docs(ReadMe.md): Updating ReadMe.md
 
-Documentation was in 
-portuguese, now it's in
-in english.
+Adding a better description of
+the project in ReadMe.md. The
+purporse of this is to make a 
+documentation easy to 
+understanding the project.
