@@ -1,3 +1,5 @@
-feat(project): updating the README and adding the folder structure
+fix(read): Documentation fixxed
 
-Setting up the foundation for the Special Topics project.
+Documentation was in 
+portuguese, now it's in
+in english.

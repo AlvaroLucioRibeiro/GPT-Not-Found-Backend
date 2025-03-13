@@ -1,1 +1,5 @@
 __pycache__
+GPT404venv/
+.env
+.coverage
+GPT404venv
