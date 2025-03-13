@@ -153,9 +153,9 @@ Contract generated for the company's and customer’s protection.
 ## 🔹 API Routes
 
 ### **🔹 Authentication**
-- `POST /auth/register` → Customer registration
-- `POST /auth/login` → Login (generates JWT Token)
-- `GET /customers/me` → Returns logged-in user data
+- `POST /auth/register` → Customer registration ✅
+- `POST /auth/login` → Login (generates JWT Token) ✅
+- `GET /customers/me` → Returns logged-in user data ✅
 
 ### **🔹 Customers**
 - `GET /customers`

@@ -1,4 +1,5 @@
-feat(db, utils): Updating requirements.txt
+fix(read): Documentation fixxed
 
-Updating requirements.txt to 
-work with all libraries correct.
+Documentation was in 
+portuguese, now it's in
+in english.
