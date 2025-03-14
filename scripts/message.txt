@@ -1,6 +1,4 @@
-docs(backend_architecture.md): Updating backend_architecture.md
+fix(create.py): documentation of function
 
-The project architecture til this moment
-is explained in backend_architecture.md.
-This was made to hava a better understanding
-of the project.
+A function had a documentation
+in portuguese. Now it's in english.

@@ -5,16 +5,16 @@ from db.db_sql_connection import connect
 
 async def create_customer(customer_data: Dict[str, str]) -> Dict[str, str]:
     """
-    Insere um novo cliente na tabela customers.
+    Insert a new customer into the customers table.
 
     Args:
-        customer_data (Dict[str, str]): Dicionário contendo os dados do cliente.
+        customer_data (Dict[str, str]): Dictionary with customer data.
 
     Returns:
-        Dict[str, str]: Mensagem de sucesso ou erro.
+        Dict[str, str]: Message confirming the customer was inserted.
 
     Raises:
-        HTTPException: Se ocorrer um erro ao inserir os dados no banco.
+        HTTPException: If an error occurs while trying to insert the customer.
     """
     query = """
         INSERT INTO customers (full_name, email, phone, address, cpf_cnpj, password_hash, role)
@@ -26,6 +26,6 @@ async def create_customer(customer_data: Dict[str, str]) -> Dict[str, str]:
             with conn.cursor() as cursor:
                 cursor.execute(query, customer_data)
             conn.commit()
-        return {"message": "Cliente cadastrado com sucesso!"}
+        return {"message": "Customer inserted successfully!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
