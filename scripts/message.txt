@@ -1,7 +1,6 @@
-docs(ReadMe.md): Updating ReadMe.md
+docs(backend_architecture.md): Updating backend_architecture.md
 
-Adding a better description of
-the project in ReadMe.md. The
-purporse of this is to make a 
-documentation easy to 
-understanding the project.
+The project architecture til this moment
+is explained in backend_architecture.md.
+This was made to hava a better understanding
+of the project.
