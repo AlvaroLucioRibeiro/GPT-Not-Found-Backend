@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
 import uvicorn
 from fastapi import FastAPI
 from modules.modules_api import router
