@@ -1,4 +1,11 @@
-fix(create.py): documentation of function
+feat(events): implement full CRUD functionality with query parameters
 
-A function had a documentation
-in portuguese. Now it's in english.
+Added full CRUD support for events with query parameter-based 
+routing. Implemented `GET /events` to retrieve all events or 
+a specific event by `event_id`. Developed `POST /events` for 
+event creation with automatic data validation. Updated 
+`PUT /events` to fetch `customer_id` dynamically and ensure 
+proper updates. Refactored `DELETE /events` to verify event 
+existence before removal, using `RETURNING id` for 
+confirmation. Standardized error handling and response 
+consistency across all endpoints.

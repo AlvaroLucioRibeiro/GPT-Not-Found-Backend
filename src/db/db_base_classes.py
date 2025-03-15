@@ -1,5 +1,8 @@
 import re
-from pydantic import BaseModel, EmailStr, field_validator
+from typing import Optional
+from datetime import datetime
+from pydantic import BaseModel, EmailStr, field_validator, Field
+
 
 class Customer(BaseModel):
     """
@@ -16,7 +19,7 @@ class Customer(BaseModel):
     """
 
     full_name: str
-    email: EmailStr 
+    email: EmailStr
     phone: str
     address: str
     cpf_cnpj: str
@@ -41,7 +44,95 @@ class Customer(BaseModel):
         Raises:
             ValueError: If the CPF/CNPJ is not in the correct format.
         """
-        cpf_cnpj_pattern = re.compile(r"^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$")
+        cpf_cnpj_pattern = re.compile(
+            r"^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$"
+        )
         if not cpf_cnpj_pattern.match(value):
-            raise ValueError("Invalid CPF/CNPJ. Use the correct format: 000.000.000-00 or 00.000.000/0000-00")
+            raise ValueError(
+                "Invalid CPF/CNPJ. Use the correct format: 000.000.000-00 or 00.000.000/0000-00"
+            )
+        return value
+
+
+class Event(BaseModel):
+    """
+    Represents an Event in the system.
+
+    Attributes:
+        customer_id (int): The ID of the customer who created the event.
+        event_type (str): The type of event ('wedding', 'corporate', 'debutante', 'other').
+        event_date (datetime): The scheduled date and time for the event.
+        location (str): The venue or address of the event.
+        guest_count (int): The number of guests attending.
+        duration_hours (int): The duration of the event in hours.
+        budget_approved (bool): Indicates whether the event budget has been approved.
+    """
+
+    customer_id: Optional[int] = None
+    event_type: str = Field(
+        ...,
+        pattern="^(wedding|corporate|debutante|other)$",
+        description="Valid types: 'wedding', 'corporate', 'debutante', 'other'",
+    )
+    event_date: datetime
+    location: str
+    guest_count: int
+    duration_hours: int
+    budget_approved: bool = False
+
+    @field_validator("event_date")
+    @classmethod
+    def validate_event_date(cls, value: datetime) -> datetime:
+        """
+        Validates that the event date is in the future.
+
+        Args:
+            value (datetime): The event date.
+
+        Returns:
+            datetime: The validated event date.
+
+        Raises:
+            ValueError: If the event date is in the past.
+        """
+        if value < datetime.utcnow():
+            raise ValueError("Event date must be in the future.")
+        return value
+
+    @field_validator("guest_count")
+    @classmethod
+    def validate_guest_count(cls, value: int) -> int:
+        """
+        Validates that the number of guests is at least 1.
+
+        Args:
+            value (int): The number of guests.
+
+        Returns:
+            int: The validated guest count.
+
+        Raises:
+            ValueError: If the number of guests is less than 1.
+        """
+        if value < 1:
+            raise ValueError("Guest count must be at least 1.")
+        return value
+
+    @field_validator("duration_hours")
+    @classmethod
+    def validate_duration(cls, value: int) -> int:
+        """
+        Validates that the event duration is at least 1 hour.
+
+        Args:
+            value (int): The duration of the event in hours.
+
+        Returns:
+            int: The validated duration.
+
+        Raises:
+            ValueError: If the duration is less than 1 hour.
+        """
+        if value < 1:
+            raise ValueError("Event duration must be at least 1 hour.")
         return value
