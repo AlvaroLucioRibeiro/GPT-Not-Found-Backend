@@ -1,6 +1,7 @@
 import re
 from typing import Optional
 from datetime import datetime
+from .db_enums import OrderStatus
 from pydantic import BaseModel, EmailStr, field_validator, Field
 
 
@@ -135,4 +136,59 @@ class Event(BaseModel):
         """
         if value < 1:
             raise ValueError("Event duration must be at least 1 hour.")
+        return value
+
+
+class Order(BaseModel):
+    """
+    Represents an Order in the system.
+
+    Attributes:
+        event_id (int): The ID of the event associated with the order.
+        order_date (datetime): The date and time when the order was created.
+        total_amount (float): The total amount of the order.
+        status (OrderStatus): The status of the order ('pending', 'paid', 'canceled').
+    """
+
+    event_id: int
+    order_date: datetime = Field(default_factory=datetime.utcnow)
+    total_amount: float
+    status: OrderStatus = OrderStatus.PENDING
+
+    @field_validator("total_amount")
+    @classmethod
+    def validate_total_amount(cls, value: float) -> float:
+        """
+        Validates that the total amount is greater than zero.
+
+        Args:
+            value (float): The total amount.
+
+        Returns:
+            float: The validated total amount.
+
+        Raises:
+            ValueError: If the total amount is not positive.
+        """
+        if value <= 0:
+            raise ValueError("Total amount must be greater than zero.")
+        return value
+
+    @field_validator("order_date")
+    @classmethod
+    def validate_order_date(cls, value: datetime) -> datetime:
+        """
+        Ensures that the order date is not in the future.
+
+        Args:
+            value (datetime): The order date.
+
+        Returns:
+            datetime: The validated order date.
+
+        Raises:
+            ValueError: If the order date is in the future.
+        """
+        if value > datetime.utcnow():
+            raise ValueError("Order date cannot be in the future.")
         return value

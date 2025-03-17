@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional
 from db.db_sql_connection import connect
 
 
@@ -95,5 +95,50 @@ async def get_all_events() -> List[Dict[str, str]]:
                     dict(zip(columns, row)) for row in cursor.fetchall()
                 ]  # Convert rows to dictionaries
         return events
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_order_by_id(order_id: int) -> Optional[Dict[str, str]]:
+    """
+    Retrieves an order by its ID.
+
+    Args:
+        order_id (int): The order identifier.
+
+    Returns:
+        Optional[Dict[str, str]]: Order details if found, otherwise None.
+
+    Raises:
+        HTTPException: If an error occurs while fetching data from the database.
+    """
+    query = "SELECT * FROM orders WHERE id = %(order_id)s"
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, {"order_id": order_id})
+                order = cursor.fetchone()
+        return order if order else None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_all_orders() -> List[Dict[str, str]]:
+    """
+    Retrieves all registered orders.
+
+    Returns:
+        List[Dict[str, str]]: List containing all orders.
+
+    Raises:
+        HTTPException: If an error occurs while fetching data from the database.
+    """
+    query = "SELECT * FROM orders"
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query)
+                orders = cursor.fetchall()
+        return orders
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
