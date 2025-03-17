@@ -1,6 +1,4 @@
-docs(backend_architecture.md): Updating backend_architecture.md
+docs(backend_explanation): Updating documentation
 
-The project architecture til this moment
-is explained in backend_architecture.md.
-This was made to hava a better understanding
-of the project.
+Updating documentation to describe
+which routes where updated. 
