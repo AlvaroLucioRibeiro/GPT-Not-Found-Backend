@@ -186,9 +186,9 @@ Contract generated for the company's and customer’s protection.
 - `DELETE /products/{id}`
 
 ### **🔹 Payments**
-- `POST /payments`
-- `GET /payments/{id}`
-- `PUT /payments/{id}`
+- `POST /payments` ✅
+- `GET /payments?payments_id={id}` ✅
+- `PUT /payments?payments_id={id}` ✅
 
 ### **🔹 Invoices**
 - `GET /invoices/{order_id}`

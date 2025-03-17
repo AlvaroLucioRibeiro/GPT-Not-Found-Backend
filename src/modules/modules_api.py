@@ -3,6 +3,7 @@ from routes.route_order import orders_router
 from routes.route_events import events_router
 from routes.route_customers_me import customers_router
 from routes.route_authentication import authentication_router
+from routes.route_payments import payments_router
 
 
 # -------------------- API ROUTES -------------------- #
@@ -12,3 +13,4 @@ router.include_router(events_router)
 router.include_router(orders_router)
 router.include_router(customers_router)
 router.include_router(authentication_router)
+router.include_router(payments_router)
