@@ -113,12 +113,19 @@ async def get_order_by_id(order_id: int) -> Optional[Dict[str, str]]:
         HTTPException: If an error occurs while fetching data from the database.
     """
     query = "SELECT * FROM orders WHERE id = %(order_id)s"
+
     try:
         with connect() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(query, {"order_id": order_id})
-                order = cursor.fetchone()
-        return order if order else None
+                row = cursor.fetchone()
+
+                if row:
+                    columns = [desc[0] for desc in cursor.description]
+                    order = dict(zip(columns, row))
+                    return order
+
+        return None
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -287,5 +294,135 @@ async def get_all_products() -> List[Dict[str, str]]:
                 cursor.execute(query)
                 columns = [desc[0] for desc in cursor.description]
                 return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_invoice_by_order_id(order_id: int) -> Optional[Dict[str, str]]:
+    """
+    Retrieves an invoice by order ID.
+
+    Args:
+        order_id (int): The order ID.
+
+    Returns:
+        Optional[Dict[str, str]]: Invoice details if found, otherwise None.
+
+    Raises:
+        HTTPException: If an error occurs while fetching the invoice.
+    """
+    query = """
+        SELECT id, order_id, invoice_number, issue_date, total_amount, pdf_file
+        FROM invoices WHERE order_id = %(order_id)s;
+    """
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, {"order_id": order_id})
+                row = cursor.fetchone()
+
+                if row:
+                    columns = [desc[0] for desc in cursor.description]
+                    invoice = dict(zip(columns, row))
+                    return invoice
+
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_invoice_pdf(invoice_id: int) -> Optional[Dict[str, str]]:
+    """
+    Retrieves the PDF file path for an invoice.
+
+    Args:
+        invoice_id (int): The invoice ID.
+
+    Returns:
+        Optional[Dict[str, str]]: Path to the invoice PDF if found, otherwise None.
+
+    Raises:
+        HTTPException: If an error occurs while fetching the invoice.
+    """
+    query = """
+        SELECT pdf_file FROM invoices WHERE id = %(invoice_id)s;
+    """
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, {"invoice_id": invoice_id})
+                row = cursor.fetchone()
+
+                if row:
+                    return {"pdf_file": row[0]}
+
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_contract_by_event_id(event_id: int) -> Optional[Dict[str, str]]:
+    """
+    Retrieves a contract by event ID.
+
+    Args:
+        event_id (int): The event ID.
+
+    Returns:
+        Optional[Dict[str, str]]: Contract details if found, otherwise None.
+
+    Raises:
+        HTTPException: If an error occurs while fetching the contract.
+    """
+    query = """
+        SELECT id, event_id, created_at, updated_at, pdf_file
+        FROM contracts WHERE event_id = %(event_id)s;
+    """
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, {"event_id": event_id})
+                row = cursor.fetchone()
+
+                if row:
+                    columns = [desc[0] for desc in cursor.description]
+                    contract = dict(zip(columns, row))
+                    return contract
+
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_contract_pdf(contract_id: int) -> Optional[Dict[str, str]]:
+    """
+    Retrieves the PDF file path for a contract.
+
+    Args:
+        contract_id (int): The contract ID.
+
+    Returns:
+        Optional[Dict[str, str]]: Path to the contract PDF if found, otherwise None.
+
+    Raises:
+        HTTPException: If an error occurs while fetching the contract.
+    """
+    query = """
+        SELECT pdf_file FROM contracts WHERE id = %(contract_id)s;
+    """
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, {"contract_id": contract_id})
+                row = cursor.fetchone()
+
+                if row:
+                    return {"pdf_file": row[0]}
+
+        return None
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -142,3 +142,37 @@ async def create_product(product_data: Dict[str, str]) -> Dict[str, str]:
                 return dict(zip(columns, new_product))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_contract(contract_data: Dict[str, str]) -> Dict[str, str]:
+    """
+    Inserts a new contract into the 'contracts' table.
+
+    Args:
+        contract_data (Dict[str, str]): Dictionary containing the contract details.
+
+    Returns:
+        Dict[str, str]: Success message with contract ID.
+
+    Raises:
+        HTTPException: If an error occurs while inserting the contract.
+    """
+    query = """
+        INSERT INTO contracts (event_id, created_at, updated_at, pdf_file)
+        VALUES (%(event_id)s, NOW(), NOW(), %(pdf_file)s)
+        RETURNING id;
+    """
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, contract_data)
+                contract_id = cursor.fetchone()[0]
+            conn.commit()
+
+        return {"message": "Contract created successfully!", "contract_id": contract_id}
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error creating contract: {str(e)}"
+        )
