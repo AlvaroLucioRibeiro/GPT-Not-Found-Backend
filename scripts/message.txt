@@ -1,6 +1,17 @@
-docs(backend_architecture.md): Updating backend_architecture.md
+feat(orders): Implement CRUD operations for orders API  
 
-The project architecture til this moment
-is explained in backend_architecture.md.
-This was made to hava a better understanding
-of the project.
+Implemented the full CRUD functionality for the 
+"orders" route, allowing users to create, 
+retrieve, update, and delete orders associated 
+with events. The `POST /orders` route was created 
+to insert new orders into the database, while the 
+`GET /orders` route allows fetching all orders or 
+a specific one by its ID. The `PUT /orders` route 
+enables updating existing orders with new details, 
+and the `DELETE /orders` route allows removing 
+orders from the system. Data validation was ensured 
+using Pydantic models and query parameters, 
+authentication middleware was integrated to restrict 
+access to authenticated users, and standardized 
+error handling with proper HTTP status codes was 
+implemented to improve API responses. 

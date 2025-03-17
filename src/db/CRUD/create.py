@@ -29,3 +29,30 @@ async def create_customer(customer_data: Dict[str, str]) -> Dict[str, str]:
         return {"message": "Cliente cadastrado com sucesso!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_order(order_data: Dict[str, str]) -> Dict[str, str]:
+    """
+    Inserts a new order into the orders table.
+
+    Args:
+        order_data (Dict[str, str]): Dictionary containing the order details.
+
+    Returns:
+        Dict[str, str]: Success or error message.
+
+    Raises:
+        HTTPException: If an error occurs while inserting data into the database.
+    """
+    query = """
+        INSERT INTO orders (event_id, order_date, total_amount, status)
+        VALUES (%(event_id)s, %(order_date)s, %(total_amount)s, %(status)s);
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, order_data)
+            conn.commit()
+        return {"message": "Order successfully created!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
