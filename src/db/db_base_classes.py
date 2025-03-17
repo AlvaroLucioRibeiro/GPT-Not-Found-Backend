@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 from datetime import datetime
-from db.db_enums import OrderStatus
+from .db_enums import OrderStatus
 from pydantic import BaseModel, EmailStr, field_validator, Field
 
 
@@ -136,9 +136,6 @@ class Event(BaseModel):
         """
         if value < 1:
             raise ValueError("Event duration must be at least 1 hour.")
-            raise ValueError(
-                "Invalid CPF/CNPJ. Use the correct format: 000.000.000-00 or 00.000.000/0000-00"
-            )
         return value
 
 
