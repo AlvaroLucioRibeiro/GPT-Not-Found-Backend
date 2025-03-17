@@ -116,3 +116,29 @@ async def create_payment(payment_data: Dict[str, str]) -> Dict[str, str]:
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_product(product_data: Dict[str, str]) -> Dict[str, str]:
+    """
+    Inserts a new product into the 'products' table.
+
+    Args:
+        product_data (Dict[str, str]): Dictionary containing the product details.
+
+    Returns:
+        Dict[str, str]: The created product details.
+    """
+    query = """
+        INSERT INTO products (name, description, base_price, category, active)
+        VALUES (%(name)s, %(description)s, %(base_price)s, %(category)s, %(active)s)
+        RETURNING *;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, product_data)
+                new_product = cursor.fetchone()
+                columns = [desc[0] for desc in cursor.description]
+                return dict(zip(columns, new_product))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

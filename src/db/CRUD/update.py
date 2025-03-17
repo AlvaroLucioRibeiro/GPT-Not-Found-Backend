@@ -175,3 +175,41 @@ async def update_payment(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def update_product(
+    product_id: int, product_data: Dict[str, str]
+) -> Dict[str, str]:
+    """
+    Updates an existing product.
+
+    Args:
+        product_id (int): The product ID.
+        product_data (Dict[str, str]): The updated product data.
+    
+    Returns:
+        Dict[str, str]: The updated product details.
+    """
+    query = """
+        UPDATE products
+        SET name = %(name)s,
+            description = %(description)s,
+            base_price = %(base_price)s,
+            category = %(category)s,
+            active = %(active)s,
+            updated_at = NOW()
+        WHERE id = %(product_id)s
+        RETURNING *;
+    """
+    product_data["product_id"] = product_id
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, product_data)
+                updated_product = cursor.fetchone()
+                if not updated_product:
+                    raise HTTPException(status_code=404, detail="Product not found")
+                columns = [desc[0] for desc in cursor.description]
+                return dict(zip(columns, updated_product))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
