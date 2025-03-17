@@ -28,10 +28,11 @@ async def update_order(order_id: int, order_data: Dict[str, str]) -> Dict[str, s
                 cursor.execute(query, {"order_id": order_id, **order_data})
             conn.commit()
         return {"message": "Order successfully updated!"}
-    
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+
 async def update_event(event_id: int, event_data: Dict[str, str]) -> Dict[str, str]:
     """
     Updates an existing event.
@@ -75,6 +76,54 @@ async def update_event(event_id: int, event_data: Dict[str, str]) -> Dict[str, s
 
             conn.commit()
         return {"message": "Event successfully updated!", "event": updated_event}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def update_customer(
+    customer_id: int, customer_data: Dict[str, str]
+) -> Dict[str, str]:
+    """
+    Updates an existing customer in the 'customers' table.
+
+    Args:
+        customer_id (int): The customer identifier.
+        customer_data (Dict[str, str]): Updated customer details.
+
+    Returns:
+        Dict[str, str]: Success message with updated customer details.
+
+    Raises:
+        HTTPException: If an error occurs while updating data in the database.
+    """
+    query = """
+        UPDATE customers
+        SET full_name = %(full_name)s,
+            email = %(email)s,
+            phone = %(phone)s,
+            address = %(address)s,
+            cpf_cnpj = %(cpf_cnpj)s,
+            role = %(role)s,
+            updated_at = NOW()
+        WHERE id = %(customer_id)s
+        RETURNING id, full_name, email, phone, address, cpf_cnpj, role, created_at, updated_at;
+    """
+
+    customer_data["customer_id"] = customer_id  # Add customer_id to the data dictionary
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, customer_data)
+                updated_customer = cursor.fetchone()
+
+            if not updated_customer:
+                raise HTTPException(
+                    status_code=404, detail="Customer not found or update failed"
+                )
+
+            conn.commit()
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
