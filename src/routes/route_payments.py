@@ -37,7 +37,7 @@ async def create_new_payment(
         )
 
 
-@payments_router.get("/{payment_id}")
+@payments_router.get("/")
 async def get_payment(
     payment_id: int,
     current_user: dict = Depends(get_current_user),
@@ -61,18 +61,18 @@ async def get_payment(
     return payment
 
 
-@payments_router.put("/{payment_id}")
+@payments_router.put("/")
 async def modify_payment(
-    payment_id: int,
+    payment_id: int = Query(..., description="The payment identifier"),
     payment: Payment = Body(...),
     current_user: dict = Depends(get_current_user),
 ):
     """
-    Updates an existing payment.
+    Updates an existing payment using a query parameter for 'payment_id' and request body for payment data.
 
     Args:
-        payment_id (int): The payment identifier.
-        payment (Payment): The updated payment data.
+        payment_id (int): The payment identifier (query parameter).
+        payment (Payment): The updated payment data from request body.
         current_user (dict): The authenticated user.
 
     Returns:
@@ -81,14 +81,9 @@ async def modify_payment(
     Raises:
         HTTPException: If the update fails.
     """
-    existing_payment = await get_payment_by_id(payment_id)
+    existing_payment = await update_payment(payment_id, payment.dict())
 
     if not existing_payment:
         raise HTTPException(status_code=404, detail="Payment not found")
 
-    updated_payment = await update_payment(payment_id, payment.dict())
-
-    if not updated_payment:
-        raise HTTPException(status_code=500, detail="Payment update failed")
-
-    return {"message": "Payment updated successfully", "payment": updated_payment}
+    return {"message": "Payment updated successfully", "payment": existing_payment}
