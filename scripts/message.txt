@@ -1,6 +1,11 @@
-docs(backend_architecture.md): Updating backend_architecture.md
+feat(events): implement full CRUD functionality with query parameters
 
-The project architecture til this moment
-is explained in backend_architecture.md.
-This was made to hava a better understanding
-of the project.
+Added full CRUD support for events with query parameter-based 
+routing. Implemented `GET /events` to retrieve all events or 
+a specific event by `event_id`. Developed `POST /events` for 
+event creation with automatic data validation. Updated 
+`PUT /events` to fetch `customer_id` dynamically and ensure 
+proper updates. Refactored `DELETE /events` to verify event 
+existence before removal, using `RETURNING id` for 
+confirmation. Standardized error handling and response 
+consistency across all endpoints.
