@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 from datetime import datetime
-from .db_enums import OrderStatus
+from .db_enums import OrderStatus, ProductType
 from pydantic import BaseModel, EmailStr, field_validator, Field
 
 
@@ -219,3 +219,57 @@ class Payment(BaseModel):
         description="Valid statuses: pending, approved, rejected",
     )
     payment_date: Optional[datetime] = None
+
+
+class Product(BaseModel):
+    """
+    Represents a Product in the system.
+
+    Attributes:
+        name (str): The name of the product.
+        description (Optional[str]): A brief description of the product.
+        base_price (float): The base price of the product.
+        category (ProductType): The category of the product ('drink', 'structure', 'service').
+        active (bool): Indicates whether the product is available for sale.
+        created_at (datetime): The timestamp when the product was created.
+        updated_at (datetime): The timestamp when the product was last updated.
+    """
+
+    name: str = Field(..., max_length=255, description="The name of the product")
+    description: Optional[str] = Field(
+        None, description="A brief description of the product"
+    )
+    base_price: float = Field(
+        ..., gt=0, description="The base price of the product, must be greater than 0"
+    )
+    category: ProductType = Field(
+        ..., description="Valid categories: 'drink', 'structure', 'service'"
+    )
+    active: bool = Field(
+        default=True, description="Indicates whether the product is available for sale"
+    )
+    created_at: Optional[datetime] = Field(
+        default_factory=datetime.utcnow, description="Timestamp of product creation"
+    )
+    updated_at: Optional[datetime] = Field(
+        default_factory=datetime.utcnow, description="Timestamp of last product update"
+    )
+
+    @field_validator("base_price")
+    @classmethod
+    def validate_base_price(cls, value: float) -> float:
+        """
+        Validates that the base price is a positive value.
+
+        Args:
+            value (float): The base price of the product.
+
+        Returns:
+            float: The validated base price.
+
+        Raises:
+            ValueError: If the base price is less than or equal to zero.
+        """
+        if value <= 0:
+            raise ValueError("Base price must be greater than zero.")
+        return value

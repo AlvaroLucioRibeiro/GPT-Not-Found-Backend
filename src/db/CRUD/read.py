@@ -247,3 +247,45 @@ async def get_payment_by_id(payment_id: int) -> Optional[Dict[str, str]]:
         return None
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_product_by_id(product_id: int) -> Optional[Dict[str, str]]:
+    """
+    Retrieves a specific product by its ID.
+
+    Args:
+        product_id (int): The product ID.
+
+    Returns:
+        Optional[Dict[str, str]]: Product details if found, otherwise None.
+    """
+    query = "SELECT * FROM products WHERE id = %s;"
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (product_id,))
+                row = cursor.fetchone()
+                if row:
+                    columns = [desc[0] for desc in cursor.description]
+                    return dict(zip(columns, row))
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_all_products() -> List[Dict[str, str]]:
+    """
+    Retrieves all products from the database.
+
+    Returns:
+        List[Dict[str, str]]: A list of dictionaries representing products.
+    """
+    query = "SELECT * FROM products;"
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query)
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

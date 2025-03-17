@@ -87,3 +87,27 @@ async def delete_customer(customer_id: int) -> bool:
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def delete_product(product_id: int) -> bool:
+    """
+    Deletes a product from the database.
+
+    Args:
+        product_id (int): The product ID.
+
+    Returns:
+        bool: True if deletion was successful, False otherwise.
+    """
+    query = "DELETE FROM products WHERE id = %s RETURNING id;"
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (product_id,))
+                deleted_product = cursor.fetchone()
+                if not deleted_product:
+                    return False
+                conn.commit()
+        return True
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

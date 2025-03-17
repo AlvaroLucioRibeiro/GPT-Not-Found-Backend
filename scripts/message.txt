@@ -1,4 +1,4 @@
 docs(backend_explanation): Updating documentation
 
-Updating documentation to describe
-which routes where updated. 
+Updating documentation to explain 
+routes added.
