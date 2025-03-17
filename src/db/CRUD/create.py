@@ -84,3 +84,35 @@ async def create_order(order_data: Dict[str, str]) -> Dict[str, str]:
         return {"message": "Order successfully created!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_payment(payment_data: Dict[str, str]) -> Dict[str, str]:
+    """
+    Inserts a new payment into the 'payments' table.
+
+    Args:
+        payment_data (Dict[str, str]): Dictionary containing the payment details.
+
+    Returns:
+        Dict[str, str]: Success message including the inserted payment ID.
+
+    Raises:
+        HTTPException: If an error occurs while inserting the payment into the database.
+    """
+    query = """
+        INSERT INTO payments (order_id, amount, payment_method, status, payment_date)
+        VALUES (%(order_id)s, %(amount)s, %(payment_method)s, %(status)s, %(payment_date)s)
+        RETURNING id;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, payment_data)
+                new_payment_id = cursor.fetchone()[0]  # Captura o ID inserido
+            conn.commit()
+        return {
+            "message": "Payment created successfully!",
+            "payment_id": new_payment_id,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -127,3 +127,51 @@ async def update_customer(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def update_payment(
+    payment_id: int, payment_data: Dict[str, str]
+) -> Dict[str, str]:
+    """
+    Updates an existing payment record in the 'payments' table.
+
+    Args:
+        payment_id (int): The unique identifier of the payment.
+        payment_data (Dict[str, str]): Dictionary containing the updated payment details.
+
+    Returns:
+        Dict[str, str]: Success message with updated payment details.
+
+    Raises:
+        HTTPException: If the payment is not found or if an error occurs during the update.
+    """
+    query = """
+        UPDATE payments
+        SET amount = %(amount)s,
+            payment_method = %(payment_method)s,
+            status = %(status)s,
+            payment_date = %(payment_date)s,
+            updated_at = NOW()
+        WHERE id = %(payment_id)s
+        RETURNING *;
+    """
+
+    # Add the payment_id to the payment_data dictionary
+    payment_data["payment_id"] = payment_id
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, payment_data)
+                updated_payment = cursor.fetchone()
+
+            if not updated_payment:
+                raise HTTPException(
+                    status_code=404, detail="Payment not found or update failed"
+                )
+
+            conn.commit()
+        return {"message": "Payment successfully updated!", "payment": updated_payment}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

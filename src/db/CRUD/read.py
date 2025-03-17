@@ -212,3 +212,34 @@ async def get_all_customers() -> List[Dict[str, str]]:
         return customers
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_payment_by_id(payment_id: int) -> Optional[Dict[str, str]]:
+    """
+    Retrieves a specific payment by its ID from the 'payments' table.
+
+    Args:
+        payment_id (int): The unique identifier of the payment.
+
+    Returns:
+        Optional[Dict[str, str]]: Dictionary containing the payment details if found, otherwise None.
+
+    Raises:
+        HTTPException: If the payment is not found or if an error occurs.
+    """
+    query = "SELECT * FROM payments WHERE id = %s;"
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (payment_id,))
+                row = cursor.fetchone()
+
+                if not row:
+                    raise HTTPException(status_code=404, detail="Payment not found")
+
+                columns = [desc[0] for desc in cursor.description]
+                return dict(zip(columns, row))
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

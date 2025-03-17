@@ -192,3 +192,30 @@ class Order(BaseModel):
         if value > datetime.utcnow():
             raise ValueError("Order date cannot be in the future.")
         return value
+
+
+class Payment(BaseModel):
+    """
+    Represents a Payment in the system.
+
+    Attributes:
+        order_id (int): The ID of the associated order.
+        amount (float): The paid amount.
+        payment_method (str): The method of payment (credit_card, pix, boleto, bank_transfer).
+        status (Optional[str]): Payment status (pending, approved, rejected).
+        payment_date (Optional[datetime]): Date of payment.
+    """
+
+    order_id: int
+    amount: float = Field(..., gt=0, description="Amount must be greater than 0")
+    payment_method: str = Field(
+        ...,
+        pattern="^(credit_card|pix|boleto|bank_transfer)$",
+        description="Valid methods: credit_card, pix, boleto, bank_transfer",
+    )
+    status: Optional[str] = Field(
+        "pending",
+        pattern="^(pending|approved|rejected)$",
+        description="Valid statuses: pending, approved, rejected",
+    )
+    payment_date: Optional[datetime] = None
