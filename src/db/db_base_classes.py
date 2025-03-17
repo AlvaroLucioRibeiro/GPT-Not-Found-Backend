@@ -273,3 +273,16 @@ class Product(BaseModel):
         if value <= 0:
             raise ValueError("Base price must be greater than zero.")
         return value
+
+
+class Contract(BaseModel):
+    """
+    Represents a contract entity.
+
+    Attributes:
+        event_id (int): The ID of the related event.
+        pdf_file (str): File path for the contract PDF.
+    """
+
+    event_id: int
+    pdf_file: str
