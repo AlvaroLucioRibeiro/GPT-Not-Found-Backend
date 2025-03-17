@@ -1,7 +1,4 @@
-feat(products): Implement product CRUD routes
+docs(backend_explanation): Updating documentation
 
-Added CRUD functionality for products, 
-including routes for creation, retrieval,
-updating, and deletion. Ensured proper 
-validation using Pydantic models and 
-enums.
+Updating documentation to explain 
+routes added.
