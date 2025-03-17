@@ -142,3 +142,73 @@ async def get_all_orders() -> List[Dict[str, str]]:
         return orders
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_customer_by_id(customer_id: int) -> Optional[Dict[str, str]]:
+    """
+    Retrieves a specific customer by their ID.
+
+    Args:
+        customer_id (int): The customer ID.
+
+    Returns:
+        Optional[Dict[str, str]]: Customer details if found, otherwise None.
+
+    Raises:
+        HTTPException: If an error occurs while fetching the customer.
+    """
+    query = """
+        SELECT id, full_name, email, phone, address, cpf_cnpj, role, created_at, updated_at
+        FROM customers 
+        WHERE id = %s;
+    """
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (customer_id,))
+                customer = cursor.fetchone()
+
+        if customer:
+            return {
+                "id": customer[0],
+                "full_name": customer[1],
+                "email": customer[2],
+                "phone": customer[3],
+                "address": customer[4],
+                "cpf_cnpj": customer[5],
+                "role": customer[6],
+                "created_at": customer[7],
+                "updated_at": customer[8],
+            }
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_all_customers() -> List[Dict[str, str]]:
+    """
+    Retrieves all customers from the database.
+
+    Returns:
+        List[Dict[str, str]]: A list of dictionaries representing customers.
+
+    Raises:
+        HTTPException: If an error occurs while fetching customers.
+    """
+    query = """
+        SELECT id, full_name, email, phone, address, cpf_cnpj, role, created_at, updated_at
+        FROM customers;
+    """
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query)
+                columns = [desc[0] for desc in cursor.description]  # Get column names
+                customers = [
+                    dict(zip(columns, row)) for row in cursor.fetchall()
+                ]  # Convert rows to dictionaries
+        return customers
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
