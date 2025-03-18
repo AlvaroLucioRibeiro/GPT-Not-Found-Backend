@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 from datetime import datetime
-from .db_enums import OrderStatus
+from .db_enums import OrderStatus, ProductType
 from pydantic import BaseModel, EmailStr, field_validator, Field
 
 
@@ -192,3 +192,97 @@ class Order(BaseModel):
         if value > datetime.utcnow():
             raise ValueError("Order date cannot be in the future.")
         return value
+
+
+class Payment(BaseModel):
+    """
+    Represents a Payment in the system.
+
+    Attributes:
+        order_id (int): The ID of the associated order.
+        amount (float): The paid amount.
+        payment_method (str): The method of payment (credit_card, pix, boleto, bank_transfer).
+        status (Optional[str]): Payment status (pending, approved, rejected).
+        payment_date (Optional[datetime]): Date of payment.
+    """
+
+    order_id: int
+    amount: float = Field(..., gt=0, description="Amount must be greater than 0")
+    payment_method: str = Field(
+        ...,
+        pattern="^(credit_card|pix|boleto|bank_transfer)$",
+        description="Valid methods: credit_card, pix, boleto, bank_transfer",
+    )
+    status: Optional[str] = Field(
+        "pending",
+        pattern="^(pending|approved|rejected)$",
+        description="Valid statuses: pending, approved, rejected",
+    )
+    payment_date: Optional[datetime] = None
+
+
+class Product(BaseModel):
+    """
+    Represents a Product in the system.
+
+    Attributes:
+        name (str): The name of the product.
+        description (Optional[str]): A brief description of the product.
+        base_price (float): The base price of the product.
+        category (ProductType): The category of the product ('drink', 'structure', 'service').
+        active (bool): Indicates whether the product is available for sale.
+        created_at (datetime): The timestamp when the product was created.
+        updated_at (datetime): The timestamp when the product was last updated.
+    """
+
+    name: str = Field(..., max_length=255, description="The name of the product")
+    description: Optional[str] = Field(
+        None, description="A brief description of the product"
+    )
+    base_price: float = Field(
+        ..., gt=0, description="The base price of the product, must be greater than 0"
+    )
+    category: ProductType = Field(
+        ..., description="Valid categories: 'drink', 'structure', 'service'"
+    )
+    active: bool = Field(
+        default=True, description="Indicates whether the product is available for sale"
+    )
+    created_at: Optional[datetime] = Field(
+        default_factory=datetime.utcnow, description="Timestamp of product creation"
+    )
+    updated_at: Optional[datetime] = Field(
+        default_factory=datetime.utcnow, description="Timestamp of last product update"
+    )
+
+    @field_validator("base_price")
+    @classmethod
+    def validate_base_price(cls, value: float) -> float:
+        """
+        Validates that the base price is a positive value.
+
+        Args:
+            value (float): The base price of the product.
+
+        Returns:
+            float: The validated base price.
+
+        Raises:
+            ValueError: If the base price is less than or equal to zero.
+        """
+        if value <= 0:
+            raise ValueError("Base price must be greater than zero.")
+        return value
+
+
+class Contract(BaseModel):
+    """
+    Represents a contract entity.
+
+    Attributes:
+        event_id (int): The ID of the related event.
+        pdf_file (str): File path for the contract PDF.
+    """
+
+    event_id: int
+    pdf_file: str

@@ -84,3 +84,95 @@ async def create_order(order_data: Dict[str, str]) -> Dict[str, str]:
         return {"message": "Order successfully created!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_payment(payment_data: Dict[str, str]) -> Dict[str, str]:
+    """
+    Inserts a new payment into the 'payments' table.
+
+    Args:
+        payment_data (Dict[str, str]): Dictionary containing the payment details.
+
+    Returns:
+        Dict[str, str]: Success message including the inserted payment ID.
+
+    Raises:
+        HTTPException: If an error occurs while inserting the payment into the database.
+    """
+    query = """
+        INSERT INTO payments (order_id, amount, payment_method, status, payment_date)
+        VALUES (%(order_id)s, %(amount)s, %(payment_method)s, %(status)s, %(payment_date)s)
+        RETURNING id;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, payment_data)
+                new_payment_id = cursor.fetchone()[0]  # Captura o ID inserido
+            conn.commit()
+        return {
+            "message": "Payment created successfully!",
+            "payment_id": new_payment_id,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_product(product_data: Dict[str, str]) -> Dict[str, str]:
+    """
+    Inserts a new product into the 'products' table.
+
+    Args:
+        product_data (Dict[str, str]): Dictionary containing the product details.
+
+    Returns:
+        Dict[str, str]: The created product details.
+    """
+    query = """
+        INSERT INTO products (name, description, base_price, category, active)
+        VALUES (%(name)s, %(description)s, %(base_price)s, %(category)s, %(active)s)
+        RETURNING *;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, product_data)
+                new_product = cursor.fetchone()
+                columns = [desc[0] for desc in cursor.description]
+                return dict(zip(columns, new_product))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_contract(contract_data: Dict[str, str]) -> Dict[str, str]:
+    """
+    Inserts a new contract into the 'contracts' table.
+
+    Args:
+        contract_data (Dict[str, str]): Dictionary containing the contract details.
+
+    Returns:
+        Dict[str, str]: Success message with contract ID.
+
+    Raises:
+        HTTPException: If an error occurs while inserting the contract.
+    """
+    query = """
+        INSERT INTO contracts (event_id, created_at, updated_at, pdf_file)
+        VALUES (%(event_id)s, NOW(), NOW(), %(pdf_file)s)
+        RETURNING id;
+    """
+
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, contract_data)
+                contract_id = cursor.fetchone()[0]
+            conn.commit()
+
+        return {"message": "Contract created successfully!", "contract_id": contract_id}
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error creating contract: {str(e)}"
+        )
