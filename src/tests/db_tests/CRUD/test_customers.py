@@ -1,14 +1,14 @@
 import pytest
+from faker import Faker
+from src.db.CRUD.create import create_customer
+from src.db.CRUD.update import update_customer
+from src.db.CRUD.delete import delete_customer
+from src.tests.utils.utils import generate_random_email, generate_cpf, generate_cnpj
 from src.db.CRUD.read import (
     get_customer_by_id,
     get_all_customers,
     get_customer_by_email,
 )
-from src.db.CRUD.create import create_customer
-from src.db.CRUD.update import update_customer
-from src.db.CRUD.delete import delete_customer
-from src.tests.utils.utils import generate_random_email, generate_cpf, generate_cnpj
-from faker import Faker
 
 fake = Faker()
 
