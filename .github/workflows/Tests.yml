@@ -17,7 +17,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15 
+        image: postgres:15
         env:
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_password
@@ -51,6 +51,12 @@ jobs:
           echo "SUPABASE_HOST=localhost" >> $GITHUB_ENV
           echo "SUPABASE_PORT=5432" >> $GITHUB_ENV
           echo "SUPABASE_DATABASE=test_db" >> $GITHUB_ENV
+
+      - name: Criar banco de dados e tabelas
+        env:
+          PGPASSWORD: test_password
+        run: |
+          psql -h localhost -U test_user -d test_db -f database/tables.sql
 
       - name: Rodar testes com Pytest
         env:
