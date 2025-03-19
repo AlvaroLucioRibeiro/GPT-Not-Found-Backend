@@ -1,3 +1,4 @@
-feat(tests_customers): Creating tests for customers
+feat(tests_customers): Updating requirements.txt
 
-Ajustment of some code syntax.
+Updating requirements.txt because of
+new tests.
