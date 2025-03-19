@@ -6,11 +6,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Variables to connect to the database
-SUPABASE_USER = os.getenv("SUPABASE_USER")
-SUPABASE_PASSWORD = os.getenv("SUPABASE_PASSWORD")
-SUPABASE_HOST = os.getenv("SUPABASE_HOST")
-SUPABASE_PORT = os.getenv("SUPABASE_PORT")
-SUPABASE_DATABASE = os.getenv("SUPABASE_DATABASE")
+SUPABASE_USER = os.getenv("SUPABASE_USER", "test_user")
+SUPABASE_PASSWORD = os.getenv("SUPABASE_PASSWORD", "test_password")
+SUPABASE_HOST = os.getenv("SUPABASE_HOST", "localhost")
+SUPABASE_PORT = os.getenv("SUPABASE_PORT", "5432")
+SUPABASE_DATABASE = os.getenv("SUPABASE_DATABASE", "test_db")
 
 
 def connect():
