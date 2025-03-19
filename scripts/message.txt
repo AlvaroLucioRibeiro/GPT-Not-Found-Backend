@@ -1,4 +1,4 @@
-docs(backend_explanation): Updating documentation
+wip(tests_customers): Creating tests for customers
 
-Updating documentation to explain 
-routes added.
+Some tests aren't passing due to problem 
+to the code logic.
