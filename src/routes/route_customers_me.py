@@ -108,8 +108,6 @@ async def modify_customer(
     if not updated_customer:
         raise HTTPException(status_code=500, detail="Customer update failed")
 
-    return {"message": "Customer updated successfully", "customer": updated_customer}
-
 
 @customers_router.delete("/")
 async def remove_customer(

@@ -1,4 +1,3 @@
-wip(tests_customers): Creating tests for customers
+feat(tests_customers): Creating tests for customers
 
-Some tests aren't passing due to problem 
-to the code logic.
+All tests to CRUD in database done.
