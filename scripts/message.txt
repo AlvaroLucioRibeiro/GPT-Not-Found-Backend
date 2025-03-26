@@ -1,5 +1,4 @@
-hotfix(customer_route): Password hash
+hotfix(customer_route): Update and delete methods
 
-Updating method POST of
-customer routes to save 
-Password hashed in Database.
+Updating method PUT and delete
+in routes of customers.

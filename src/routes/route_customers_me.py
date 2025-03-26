@@ -118,12 +118,15 @@ async def modify_customer(
     if not existing_customer:
         raise HTTPException(status_code=404, detail="Customer not found")
 
-    updated_customer = await update_customer(customer_id, customer.dict())
-
-    if not updated_customer:
-        raise HTTPException(status_code=500, detail="Customer update failed")
-
-    return {"message": "Customer updated successfully", "customer": updated_customer}
+    try:
+        customer_data = customer.dict()
+        updated_customer = await update_customer(customer_id, customer_data)
+        return {'message': 'Updated successfully', 'customer': updated_customer}
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error updating customer: {str(exc)}",
+        )
 
 
 @customers_router.delete("/")
@@ -149,9 +152,14 @@ async def remove_customer(
     if not existing_customer:
         raise HTTPException(status_code=404, detail="Customer not found")
 
-    deleted = await delete_customer(customer_id)
+    try:
+        deleted = await delete_customer(customer_id)
+        if not deleted:
+            raise HTTPException(status_code=500, detail="Customer could not be deleted")
+        return {"message": "Customer deleted successfully"}
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error deleting customer: {str(exc)}",
+        )
 
-    if not deleted:
-        raise HTTPException(status_code=500, detail="Customer could not be deleted")
-
-    return {"message": "Customer deleted successfully"}
