@@ -34,7 +34,7 @@ URL = "https://gpt-not-found.vercel.app"
 
 LOGIN_ROUTE = "/auth/login"
 
-CUSTOMER_ROUTE = "/customers"
+CUSTOMER_ROUTE = "/auth/register"
 
 
 def test_create_customer():
@@ -43,37 +43,43 @@ def test_create_customer():
     response = requests.post(URL + CUSTOMER_ROUTE, json=CUSTOMER_TEST_API).json()
 
     assert response is not None
-    assert response == {
-        "message": "Customer created successfully!",
-        "customer": {"message": "Customer inserted successfully!"},
-    }
+    assert response["message"] ==  f"User {CUSTOMER_TEST_API['full_name']} registered successfully!"
+    # assert response == {
+    #     "message": "Customer created successfully!",
+    #     "customer": {"message": "Customer inserted successfully!"},
+    # }
 
 
 def test_get_customer_data_by_email():
     """Test getting a customer by email with authentication"""
 
     # Step 1: Obter o token de autenticação
-    # login_response = requests.post(
-    #     URL + LOGIN_ROUTE,
-    #     data={
-    #         "username": CUSTOMER_TEST_API["email"],
-    #         "password": CUSTOMER_TEST_API["password_hash"],
-    #     },
-    #     headers={"Content-Type": "application/x-www-form-urlencoded"},
-    # )
-
-    # # Step 1: Obter o token de autenticação mockado
     login_response = requests.post(
         URL + LOGIN_ROUTE,
         data={
-            "username": CUSTOMER_TEST_API_MOCK["email"],
-            "password": CUSTOMER_TEST_API_MOCK["password_hash"],
+            "username": CUSTOMER_TEST_API["email"],
+            "password": CUSTOMER_TEST_API["password_hash"],
         },
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
 
+    print(CUSTOMER_TEST_API["email"])
+    print(CUSTOMER_TEST_API["password_hash"])
+
+    # # Step 1: Obter o token de autenticação mockado
+    # login_response = requests.post(
+    #     URL + LOGIN_ROUTE,
+    #     data={
+    #         "username": CUSTOMER_TEST_API_MOCK["email"],
+    #         "password": CUSTOMER_TEST_API_MOCK["password_hash"],
+    #     },
+    #     headers={"Content-Type": "application/x-www-form-urlencoded"},
+    # )
+
     # print("Status Code:", login_response.status_code)
     # print("Response Body:", login_response.text)
+
+    print(login_response)
 
     assert login_response.status_code == 200
     token = login_response.json().get("access_token")
