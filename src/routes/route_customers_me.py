@@ -121,7 +121,7 @@ async def modify_customer(
     try:
         customer_data = customer.dict()
         updated_customer = await update_customer(customer_id, customer_data)
-        return {'message': 'Updated successfully', 'customer': updated_customer}
+        return {'message': 'Updated customer data successfully'}
     except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
