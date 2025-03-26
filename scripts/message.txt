@@ -1,4 +1,5 @@
-docs(backend_explanation): Updating documentation
+hotfix(customer_route): Password hash
 
-Updating documentation to explain 
-routes added.
+Updating method POST of
+customer routes to save 
+Password hashed in Database.
