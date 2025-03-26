@@ -3,7 +3,7 @@ from faker import Faker
 from src.db.CRUD.create import create_customer
 from src.db.CRUD.update import update_customer
 from src.db.CRUD.delete import delete_customer
-from src.tests.utils.utils import generate_random_email, generate_cpf, generate_cnpj
+from src.tests.utils.utils import generate_random_email, generate_cpf, generate_cnpj, generate_password
 from src.db.CRUD.read import (
     get_customer_by_id,
     get_all_customers,
@@ -18,7 +18,7 @@ CUSTOMER_TEST_DATA = {
     "phone": fake.phone_number(),
     "address": fake.address(),
     "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()]),
-    "password_hash": fake.sha256(),
+    "password_hash": generate_password(),
     "role": fake.random_element(elements=["customer", "admin"]),
 }
 
