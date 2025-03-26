@@ -6,6 +6,12 @@ from db.CRUD.read import get_customer_by_id, get_all_customers
 from db.CRUD.update import update_customer
 from db.CRUD.delete import delete_customer
 from utils.utils_token_auth import get_current_user
+from utils.utils_validation import (
+    get_password_hash,
+    validate_password_strength,
+    validate_email_format,
+    verify_password,
+)
 
 customers_router = APIRouter(prefix="/customers", tags=["Customers"])
 
@@ -67,6 +73,15 @@ async def create_new_customer(
     Raises:
         HTTPException: If the customer creation fails.
     """
+     # Validate email format
+    validate_email_format(customer.email)
+
+    # Validate password strength
+    validate_password_strength(customer.password_hash)
+
+    # Hash the password before storing it in the database
+    customer.password_hash = get_password_hash(customer.password_hash)
+
     try:
         customer_data = customer.dict()
         new_customer = await create_customer(customer_data)
