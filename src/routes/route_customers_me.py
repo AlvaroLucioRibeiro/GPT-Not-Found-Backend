@@ -6,6 +6,12 @@ from db.CRUD.read import get_customer_by_id, get_all_customers
 from db.CRUD.update import update_customer
 from db.CRUD.delete import delete_customer
 from utils.utils_token_auth import get_current_user
+from utils.utils_validation import (
+    get_password_hash,
+    validate_password_strength,
+    validate_email_format,
+    verify_password,
+)
 
 customers_router = APIRouter(prefix="/customers", tags=["Customers"])
 
@@ -67,6 +73,15 @@ async def create_new_customer(
     Raises:
         HTTPException: If the customer creation fails.
     """
+     # Validate email format
+    validate_email_format(customer.email)
+
+    # Validate password strength
+    validate_password_strength(customer.password_hash)
+
+    # Hash the password before storing it in the database
+    customer.password_hash = get_password_hash(customer.password_hash)
+
     try:
         customer_data = customer.dict()
         new_customer = await create_customer(customer_data)
@@ -103,10 +118,15 @@ async def modify_customer(
     if not existing_customer:
         raise HTTPException(status_code=404, detail="Customer not found")
 
-    updated_customer = await update_customer(customer_id, customer.dict())
-
-    if not updated_customer:
-        raise HTTPException(status_code=500, detail="Customer update failed")
+    try:
+        customer_data = customer.dict()
+        updated_customer = await update_customer(customer_id, customer_data)
+        return {'message': 'Updated customer data successfully'}
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error updating customer: {str(exc)}",
+        )
 
 
 @customers_router.delete("/")
@@ -132,9 +152,14 @@ async def remove_customer(
     if not existing_customer:
         raise HTTPException(status_code=404, detail="Customer not found")
 
-    deleted = await delete_customer(customer_id)
+    try:
+        deleted = await delete_customer(customer_id)
+        if not deleted:
+            raise HTTPException(status_code=500, detail="Customer could not be deleted")
+        return {"message": "Customer deleted successfully"}
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error deleting customer: {str(exc)}",
+        )
 
-    if not deleted:
-        raise HTTPException(status_code=500, detail="Customer could not be deleted")
-
-    return {"message": "Customer deleted successfully"}

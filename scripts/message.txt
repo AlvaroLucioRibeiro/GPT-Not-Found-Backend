@@ -1,3 +1,4 @@
-feat(test_route_customer): Adding tests for customer routers
+hotfix(customer_route): Update and delete methods
 
-All tests working properly.
+Updating method PUT and delete
+in routes of customers.
