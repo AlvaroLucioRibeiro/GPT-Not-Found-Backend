@@ -62,3 +62,22 @@ def generate_password(length=12, use_symbols=True):
 
     password = "".join(random.choice(characters) for _ in range(length))
     return password
+
+
+def generate_cell_phone_number():
+    """
+    Generate a random cell phone number in the format xx-xxxxx-xxxx.
+
+    Returns:
+        str: A string representing a randomly generated phone number,
+             where each 'x' is a digit (0-9), following the format:
+             two digits - five digits - four digits.
+
+    Example:
+        >>> generate_cell_phone_number()
+        '93-58492-1034'
+    """
+    part1 = "".join(str(random.randint(0, 9)) for _ in range(2))
+    part2 = "".join(str(random.randint(0, 9)) for _ in range(5))
+    part3 = "".join(str(random.randint(0, 9)) for _ in range(4))
+    return f"{part1}-{part2}-{part3}"
