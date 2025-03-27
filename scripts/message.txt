@@ -1,5 +1,4 @@
-tests(payments_CRUD): Tests for payments_CRUD
+tests(payments_CRUD): Tests for route of payments
 
-Tests dedicated to test if the 
-functions of CRUD are working 
-properly.
+Tests dedicated to payments route
+done.
