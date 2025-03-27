@@ -15,40 +15,75 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test_user"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-      - name: Set up Python 3.11
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Install dependencies from requirements.txt
+      - name: Instalar dependências do projeto
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Local Tests
+      - name: Definir variáveis de ambiente
+        run: |
+          echo "SUPABASE_USER=test_user" >> $GITHUB_ENV
+          echo "SUPABASE_PASSWORD=test_password" >> $GITHUB_ENV
+          echo "SUPABASE_HOST=localhost" >> $GITHUB_ENV
+          echo "SUPABASE_PORT=5432" >> $GITHUB_ENV
+          echo "SUPABASE_DATABASE=test_db" >> $GITHUB_ENV
+
+      - name: Criar banco de dados e tabelas
+        env:
+          PGPASSWORD: test_password
+        run: |
+          psql -h localhost -U test_user -d test_db -f database/tables.sql
+
+      - name: Rodar testes com Pytest
         env:
           API_URL: "http://localhost:8000"
+          SUPABASE_USER: test_user
+          SUPABASE_PASSWORD: test_password
+          SUPABASE_HOST: localhost
+          SUPABASE_PORT: 5432
+          SUPABASE_DATABASE: test_db
         run: |
           pytest --html=report.html --self-contained-html --cov=./ --cov-report=html --log-cli-level=INFO --log-file=logfile.log --log-file-level=DEBUG
 
-      - name: Upload Test Report
+      - name: Upload do Relatório de Testes
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: report.html
 
-      - name: Upload Log File
+      - name: Upload do Arquivo de Log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: logfile
           path: logfile.log
 
-      - name: Upload Coverage Report
+      - name: Upload do Relatório de Cobertura
         if: always()
         uses: actions/upload-artifact@v4
         with:
