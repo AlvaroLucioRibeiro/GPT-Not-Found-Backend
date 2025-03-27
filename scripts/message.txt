@@ -1,4 +1,3 @@
-hotfix(customer_route): Update and delete methods
+fix(customer_route): Updating test of update customer
 
-Updating method PUT and delete
-in routes of customers.
+Ajusting database.

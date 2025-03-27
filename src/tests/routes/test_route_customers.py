@@ -5,6 +5,7 @@ from src.tests.utils.utils import (
     generate_cpf,
     generate_cnpj,
     generate_password,
+    generate_cell_phone_number,
 )
 
 fake = Faker()
@@ -12,7 +13,7 @@ fake = Faker()
 CUSTOMER_TEST_API = {
     "full_name": fake.name(),
     "email": generate_random_email(),
-    "phone": fake.phone_number(),
+    "phone": generate_cell_phone_number(),
     "address": fake.address(),
     "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()]),
     "password_hash": generate_password(),
@@ -121,13 +122,14 @@ def test_get_all_customers():
     assert CUSTOMER_TEST_API_LOGGED["address"] == customer["address"]
     assert CUSTOMER_TEST_API_LOGGED["cpf_cnpj"] == customer["cpf_cnpj"]
 
+
 def test_update_customer():
     """Test updating a customer by the API"""
 
     new_customer_data = {
         "full_name": fake.name(),
-        "email": CUSTOMER_TEST_API_LOGGED['email'],
-        "phone": fake.phone_number(),
+        "email": CUSTOMER_TEST_API_LOGGED["email"],
+        "phone": generate_cell_phone_number(),
         "address": fake.address(),
         "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()]),
         "password_hash": generate_password(),
@@ -139,7 +141,8 @@ def test_update_customer():
     response = requests.put(URL + route, json=new_customer_data, headers=headers).json()
 
     assert response is not None
-    assert response ==  {"message": "Updated customer data successfully"}
+    assert response == {"message": "Updated customer data successfully"}
+
 
 def test_delete_customer():
     """Test deleting a customer by the API"""
