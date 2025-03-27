@@ -122,6 +122,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     Returns:
         str: The encoded JWT token.
     """
+    if SECRET_KEY is None or ALGORITHM is None:
+        raise ValueError("SECRET_KEY and ALGORITHM must be set in environment variables")
+
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
