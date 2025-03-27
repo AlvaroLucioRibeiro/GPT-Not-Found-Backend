@@ -1,3 +1,3 @@
-wip(test_route_customer): Adding tests for customer routers
+feat(test_route_customer): Adding tests for customer routers
 
-Started to run tests in customers routers.
+All tests working properly.

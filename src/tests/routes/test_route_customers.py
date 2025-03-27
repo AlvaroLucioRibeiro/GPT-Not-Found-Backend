@@ -126,7 +126,7 @@ def test_update_customer():
 
     new_customer_data = {
         "full_name": fake.name(),
-        "email": generate_random_email(),
+        "email": CUSTOMER_TEST_API_LOGGED['email'],
         "phone": fake.phone_number(),
         "address": fake.address(),
         "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()]),
@@ -147,8 +147,6 @@ def test_delete_customer():
     headers = {"Authorization": f"Bearer {TOKEN}"}
     route = f"{CUSTOMER_ROUTE}?customer_id={int(CUSTOMER_TEST_API_LOGGED['id'])}"
     response = requests.delete(URL + route, headers=headers).json()
-    # print(CUSTOMER_TEST_API_LOGGED['id'])
-    # print(response)
 
     assert response is not None
-    assert response == {"message": "Customer deleted successfully!"}
+    assert response == {"message": "Customer deleted successfully"}
