@@ -11,12 +11,12 @@ from src.tests.utils.utils import (
 fake = Faker()
 
 CUSTOMER_TEST_API = {
-    "full_name": fake.name(),
-    "email": generate_random_email(),
-    "phone": generate_cell_phone_number(),
+    "full_name": fake.name()[:255],
+    "email": generate_random_email()[:255],
+    "phone": generate_cell_phone_number()[:20],
     "address": fake.address(),
-    "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()]),
-    "password_hash": generate_password(),
+    "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()])[:20],
+    "password_hash": generate_password()[:255],
     "role": fake.random_element(elements=["customer", "admin"]),
 }
 
@@ -126,14 +126,15 @@ def test_update_customer():
     """Test updating a customer by the API"""
 
     new_customer_data = {
-        "full_name": fake.name(),
+        "full_name": fake.name()[:255],
         "email": CUSTOMER_TEST_API_LOGGED['email'],
-        "phone": generate_cell_phone_number(),
+        "phone": generate_cell_phone_number()[:20],
         "address": fake.address(),
-        "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()]),
-        "password_hash": generate_password(),
+        "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()])[:20],
+        "password_hash": generate_password()[:255],
         "role": fake.random_element(elements=["customer", "admin"]),
     }
+
 
     headers = {"Authorization": f"Bearer {TOKEN}"}
     route = f"{CUSTOMER_ROUTE}?customer_id={CUSTOMER_TEST_API_LOGGED['id']}"
