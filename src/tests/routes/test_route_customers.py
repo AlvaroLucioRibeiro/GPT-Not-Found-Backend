@@ -43,6 +43,84 @@ def test_create_customer():
     }
 
 
+def test_create_customer_invalid_email():
+    """Test customer creation with invalid email"""
+    invalid_data = CUSTOMER_TEST_API.copy()
+    invalid_data["email"] = "invalid-email"
+
+    response = requests.post(URL + CUSTOMER_ROUTE, json=invalid_data)
+
+    assert response is not None
+    assert response.status_code == 422
+    assert response.json() == {
+        "detail": [
+            {
+                "type": "value_error",
+                "loc": ["body", "email"],
+                "msg": "value is not a valid email address: An email address must have an @-sign.",
+                "input": "invalid-email",
+                "ctx": {"reason": "An email address must have an @-sign."},
+            }
+        ]
+    }
+
+
+def test_create_customer_weak_password():
+    """Test customer creation with weak password"""
+    invalid_data = CUSTOMER_TEST_API.copy()
+    invalid_data["password_hash"] = "123"
+
+    response = requests.post(URL + CUSTOMER_ROUTE, json=invalid_data)
+
+    assert response.status_code == 400
+    assert response.json() == {
+        "detail": "The password must be at least 6 characters long."
+    }
+
+
+def test_get_customer_data_by_invalid_token():
+    """Test fetching customer data with invalid token"""
+    headers = {"Authorization": "Bearer invalid.token.here"}
+
+    response = requests.get(URL + CUSTOMER_ROUTE + "/me", headers=headers)
+
+    assert response.status_code == 401
+
+
+def test_get_customer_by_nonexistent_id():
+    """Test fetching customer by non-existent ID"""
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    route = f"{CUSTOMER_ROUTE}?customer_id=999999"
+
+    response = requests.get(URL + route, headers=headers)
+
+    assert response.status_code == 401
+    assert response.json() == {"detail": "Invalid token"}
+
+
+def test_update_customer_not_found():
+    """Test updating a non-existent customer"""
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    route = f"{CUSTOMER_ROUTE}?customer_id=999999"
+
+    data = CUSTOMER_TEST_API.copy()
+    response = requests.put(URL + route, json=data, headers=headers)
+
+    assert response.status_code == 401
+    assert response.json() == {"detail": "Invalid token"}
+
+
+def test_delete_customer_not_found():
+    """Test deleting a non-existent customer"""
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    route = f"{CUSTOMER_ROUTE}?customer_id=999999"
+
+    response = requests.delete(URL + route, headers=headers)
+
+    assert response.status_code == 401
+    assert response.json() == {"detail": "Invalid token"}
+
+
 def test_get_customer_data_by_token():
     """Test getting a customer by token"""
 
