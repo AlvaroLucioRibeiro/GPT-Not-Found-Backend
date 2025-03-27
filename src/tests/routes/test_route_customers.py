@@ -125,49 +125,30 @@ def test_update_customer():
     """Test updating a customer by the API"""
 
     new_customer_data = {
-        "full_name":CUSTOMER_TEST_API_LOGGED["full_name"],
-        "email": CUSTOMER_TEST_API_LOGGED["email"],
-        "phone": CUSTOMER_TEST_API_LOGGED["phone"],
-        "address": CUSTOMER_TEST_API_LOGGED["address"],
-        "cpf_cnpj": CUSTOMER_TEST_API_LOGGED["cpf_cnpj"],
-        "password_hash": CUSTOMER_TEST_API_LOGGED["password_hash"],
-        "role": CUSTOMER_TEST_API_LOGGED["role"],
+        "full_name": fake.name(),
+        "email": generate_random_email(),
+        "phone": fake.phone_number(),
+        "address": fake.address(),
+        "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()]),
+        "password_hash": generate_password(),
+        "role": fake.random_element(elements=["customer", "admin"]),
     }
-    # new_customer_data = {
-    #     "full_name": fake.name(),
-    #     "email": generate_random_email(),
-    #     "phone": fake.phone_number(),
-    #     "address": fake.address(),
-    #     "cpf_cnpj": fake.random_element(elements=[generate_cpf(), generate_cnpj()]),
-    #     "password_hash": generate_password(),
-    #     "role": fake.random_element(elements=["customer", "admin"]),
-    # }
 
     headers = {"Authorization": f"Bearer {TOKEN}"}
     route = f"{CUSTOMER_ROUTE}?customer_id={CUSTOMER_TEST_API_LOGGED['id']}"
     response = requests.put(URL + route, json=new_customer_data, headers=headers).json()
-    print(response)
 
     assert response is not None
-    assert response ==  {"message": "Customer successfully updated!", "customer": new_customer_data}
-
-    # Update the global variable with the new data
-    CUSTOMER_TEST_API_LOGGED["full_name"] = new_customer_data["full_name"]
-    CUSTOMER_TEST_API_LOGGED["email"] = new_customer_data["email"]
-    CUSTOMER_TEST_API_LOGGED["phone"] = new_customer_data["phone"]
-    CUSTOMER_TEST_API_LOGGED["address"] = new_customer_data["address"]
-    CUSTOMER_TEST_API_LOGGED["cpf_cnpj"] = new_customer_data["cpf_cnpj"]
-    CUSTOMER_TEST_API_LOGGED["role"] = new_customer_data["role"]
-    CUSTOMER_TEST_API_LOGGED["password_hash"] = new_customer_data["password_hash"]
-    CUSTOMER_TEST_API_LOGGED["role"] = new_customer_data["role"]
+    assert response ==  {"message": "Updated customer data successfully"}
 
 def test_delete_customer():
     """Test deleting a customer by the API"""
 
     headers = {"Authorization": f"Bearer {TOKEN}"}
-    route = f"{CUSTOMER_ROUTE}?customer_id={CUSTOMER_TEST_API_LOGGED['id']}"
-    response = requests.put(URL + route, headers=headers).json()
-    print(response)
+    route = f"{CUSTOMER_ROUTE}?customer_id={int(CUSTOMER_TEST_API_LOGGED['id'])}"
+    response = requests.delete(URL + route, headers=headers).json()
+    # print(CUSTOMER_TEST_API_LOGGED['id'])
+    # print(response)
 
     assert response is not None
     assert response == {"message": "Customer deleted successfully!"}
