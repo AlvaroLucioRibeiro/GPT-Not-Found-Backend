@@ -1,4 +1,4 @@
-fix(customer_route): Ajusting requirements.txt
+tests(customer_route): Tests for error responses
 
-Ajusting requirements.txt to build
-correctly in vercel.
+Tests dedicated to error responses
+from API.
