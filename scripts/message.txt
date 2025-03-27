@@ -1,3 +1,4 @@
-fix(customer_route): Updating test of update customer
+fix(customer_route): Ajusting requirements.txt
 
-Ajusting database.
+Ajusting requirements.txt to build
+correctly in vercel.
