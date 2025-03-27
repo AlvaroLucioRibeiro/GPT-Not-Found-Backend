@@ -125,7 +125,7 @@ def test_update_customer():
     """Test updating a customer by the API"""
 
     new_customer_data = {
-        "full_name": fake.name(),
+        "full_name": CUSTOMER_TEST_API_LOGGED['full_name'],
         "email": CUSTOMER_TEST_API_LOGGED['email'],
         "phone": fake.phone_number(),
         "address": fake.address(),
