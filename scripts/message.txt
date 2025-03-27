@@ -1,4 +1,5 @@
-tests(customer_route): Tests for error responses
+tests(payments_CRUD): Tests for payments_CRUD
 
-Tests dedicated to error responses
-from API.
+Tests dedicated to test if the 
+functions of CRUD are working 
+properly.
