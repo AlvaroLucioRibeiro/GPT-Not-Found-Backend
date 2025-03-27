@@ -36,7 +36,7 @@ CREATED_PAYMENT_ID = None
 
 
 def test_authenticate_user():
-    """Autentica o usuário e armazena o token"""
+    """authenticate user"""
     global TOKEN, HEADERS
 
     response = requests.post(URL + CUSTOMER_ROUTE, json=CUSTOMER_TEST_API).json()
@@ -64,7 +64,7 @@ def test_authenticate_user():
 
 
 def test_create_payment_success():
-    """Testa a criação de pagamento com sucesso"""
+    """Test creating a payment"""
     global CREATED_PAYMENT_ID
 
     payload = {
@@ -86,7 +86,7 @@ def test_create_payment_success():
 
 
 def test_create_payment_invalid_fields():
-    """Testa criação de pagamento com dados inválidos"""
+    """Test creating a payment with invalid fields"""
     invalid_payload = {
         "order_id": "invalid_id",
         "amount": "invalid_amount",
@@ -141,7 +141,7 @@ def test_create_payment_invalid_fields():
 
 
 def test_get_payment_by_valid_id():
-    """Testa busca de pagamento por ID válido"""
+    """Test fetching payment by valid ID"""
     response = requests.get(
         f"{URL + PAYMENTS_ROUTE}/?payment_id={CREATED_PAYMENT_ID}", headers=HEADERS
     )
@@ -151,16 +151,17 @@ def test_get_payment_by_valid_id():
 
 
 def test_get_payment_by_invalid_id():
-    """Testa busca de pagamento por ID inválido"""
+    """Test fetching payment by invalid ID"""
     response = requests.get(
         f"{URL + PAYMENTS_ROUTE}/?payment_id={INVALID_PAYMENT_ID}", headers=HEADERS
     )
+
     assert response.status_code == 404
     assert response.json() == {"detail": "Payment not found"}
 
 
 def test_update_payment_success():
-    """Testa atualização de um pagamento existente"""
+    """Test update of a payment"""
     updated_payload = {
         "order_id": VALID_ORDER_ID,
         "amount": "4000.0",
@@ -185,7 +186,7 @@ def test_update_payment_success():
 
 
 def test_update_payment_invalid_id():
-    """Testa tentativa de atualizar pagamento inexistente"""
+    """Test update of a non-existent payment"""
     updated_payload = {
         "order_id": VALID_ORDER_ID,
         "amount": "1000.00",
@@ -205,9 +206,8 @@ def test_update_payment_invalid_id():
 
 
 def test_get_payment_unauthorized():
-    """Testa tentativa de acessar rota sem autenticação"""
+    """Test fetching payment data without authentication"""
     response = requests.get(f"{URL + PAYMENTS_ROUTE}/?payment_id=1")
 
     assert response.status_code == 401
     assert response.json() == {"detail": "Not authenticated"}
-
