@@ -57,8 +57,11 @@ async def create_new_event(
     """
     try:
         event.customer_id = current_user["id"]
-        new_event = await create_event(event.dict())
-        return {"message": "Event created successfully!", "event": new_event}
+        result = await create_event(event.dict())
+        return {
+            "message": result["message"],
+            "event_id": result["event_id"]
+        }
     except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
