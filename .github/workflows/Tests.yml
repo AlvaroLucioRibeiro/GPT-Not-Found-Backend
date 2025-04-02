@@ -116,10 +116,10 @@ jobs:
     - name: Install PyInstaller
       run: pip install pyinstaller
 
-    - name: Build package with PyInstaller
+    - name: Build with PyInstaller
       run: |
         ls -R src/
-        pyinstaller --onefile src/main.py || exit 1
+        pyinstaller --name elo-drinks-app --onefile src/main.py
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
