@@ -1,4 +1,4 @@
-docs(backend_explanation): Updating documentation
+feat(github_actions): Updating git hub actions
 
-Updating documentation of the 
-backend.
+Updating git hub actions to name of
+steps of pipeline to be in english.
