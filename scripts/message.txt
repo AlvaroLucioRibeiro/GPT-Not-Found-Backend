@@ -1,4 +1,4 @@
-hotfix(customer_route): Update and delete methods
+tests(customer_route): Tests for error responses
 
-Updating method PUT and delete
-in routes of customers.
+Tests dedicated to error responses
+from API.

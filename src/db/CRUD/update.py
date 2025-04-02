@@ -124,7 +124,8 @@ async def update_customer(
                 )
 
             conn.commit()
-
+        return {"message": "Customer successfully updated!", "customer": updated_customer}
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
