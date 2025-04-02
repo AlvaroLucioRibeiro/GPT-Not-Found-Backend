@@ -14,7 +14,7 @@ fi
 
 # Loop through the email list and send the message
 for email in $(echo "$EMAILS" | tr ',' '\n'); do
-  echo "✅ Pipeline executed successfully!" | mailx -s "Elo Drinks Pipeline Notification" "$email"
+  echo "✅ Pipeline executed successfully!" | mail -s "Elo Drinks Pipeline Notification" "$email"
 done
 
 echo "✅ All notification emails have been sent."
