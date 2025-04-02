@@ -1,5 +1,4 @@
-feat(git_hub_actions): Updating git_hub_actions
+docs(backend_explanation): Updating documentation
 
-Git hub actions was updated 
-to run a base data to run CRUD 
-tests in database.
+Updating documentation of the 
+backend.
