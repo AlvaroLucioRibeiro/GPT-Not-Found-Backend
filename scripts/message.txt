@@ -1,6 +1,5 @@
-tests(payments_CRUD): Tests for route of payments
+feat(git_hub_actions): Updating git_hub_actions
 
-Tests dedicated to payments route
-done. Now using a base data to mock
-data for some tables were the id of 
-other table is necessary.
+Git hub actions was updated 
+to run a base data to run CRUD 
+tests in database.
