@@ -17,4 +17,7 @@ for email in $(echo "$EMAILS" | tr ',' '\n'); do
   echo "✅ Pipeline executed successfully!" | mailx -s "Elo Drinks Pipeline Notification" "$email"
 done
 
+echo "📧 Notification email sent to $email"
+done
+
 echo "✅ All notification emails have been sent."
