@@ -134,6 +134,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Give execution permission to the email script
+        run: chmod +x ./scripts/send_email_notification.sh
+
       - name: Send email notification using script
         run: ./scripts/send_email_notification.sh
         env:
