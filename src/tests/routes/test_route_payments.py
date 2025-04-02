@@ -16,7 +16,7 @@ LOGIN_ROUTE = "/auth/login"
 PAYMENTS_ROUTE = "/payments"
 CUSTOMER_ROUTE = "/customers"
 
-VALID_ORDER_ID = 11
+VALID_ORDER_ID = 3001
 INVALID_PAYMENT_ID = 999999
 
 CUSTOMER_TEST_API = {
@@ -211,3 +211,12 @@ def test_get_payment_unauthorized():
 
     assert response.status_code == 401
     assert response.json() == {"detail": "Not authenticated"}
+
+def test_delete_payment():
+    """Test deleting a payment"""
+    response = requests.delete(
+        f"{URL + PAYMENTS_ROUTE}/?payment_id={CREATED_PAYMENT_ID}", headers=HEADERS
+    )
+
+    assert response.status_code == 405
+    assert response.json() == {'detail': 'Method Not Allowed'}

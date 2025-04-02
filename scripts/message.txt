@@ -1,4 +1,6 @@
 tests(payments_CRUD): Tests for route of payments
 
 Tests dedicated to payments route
-done.
+done. Now using a base data to mock
+data for some tables were the id of 
+other table is necessary.

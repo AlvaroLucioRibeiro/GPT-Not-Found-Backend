@@ -5,7 +5,7 @@ from src.db.CRUD.create import create_payment
 from src.db.CRUD.update import update_payment
 
 # Assuming that the order with ID 11 exists in the database
-VALID_ORDER_ID = 11 
+VALID_ORDER_ID = 3001 
 
 INVALID_PAYMENT_ID = 999999
 
