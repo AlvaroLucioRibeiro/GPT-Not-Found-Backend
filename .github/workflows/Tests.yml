@@ -128,16 +128,13 @@ jobs:
         path: dist/*
 
   notify:
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
     steps:
-      - name: Install mailx
-        run: sudo apt-get install -y mailutils
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Send email notification
-        run: |
-          for email in $(echo "${{ secrets.EMAILS }}" | tr ',' '\n'); do
-            echo "Pipeline executed successfully!" | mailx -s "Pipeline Notification" "$email"
-          done
+      - name: Send email notification using script
+        run: ./scripts/send_email_notification.sh
         env:
           EMAILS: ${{ secrets.EMAILS }}
