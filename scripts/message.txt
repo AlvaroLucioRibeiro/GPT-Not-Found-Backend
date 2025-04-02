@@ -1,4 +1,4 @@
-tests(customer_route): Tests for error responses
+docs(backend_explanation): Updating documentation
 
-Tests dedicated to error responses
-from API.
+Updating documentation of the 
+backend.

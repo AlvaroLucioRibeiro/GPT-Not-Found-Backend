@@ -58,6 +58,12 @@ jobs:
         run: |
           psql -h localhost -U test_user -d test_db -f database/tables.sql
 
+      - name: Criar dados de teste
+        env:
+          PGPASSWORD: test_password
+        run: |
+          psql -h localhost -U test_user -d test_db -f database/base_data.sql
+
       - name: Rodar testes com Pytest
         env:
           API_URL: "http://localhost:8000"
