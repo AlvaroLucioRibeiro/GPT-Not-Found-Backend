@@ -60,7 +60,6 @@ async def create_event(event_data: Dict[str, str]) -> Dict[str, str]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 async def create_order(order_data: Dict[str, str]) -> Dict[str, str]:
     """
     Inserts a new order into the orders table.

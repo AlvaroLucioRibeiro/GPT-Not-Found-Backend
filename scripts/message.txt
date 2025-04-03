@@ -1,4 +1,4 @@
-feat(events_route): Route events updated
+tests(events_route): Updating tests
 
-Route of events updated due
-wrong response for API.
+Updating tests dedicated
+to test route of events.
