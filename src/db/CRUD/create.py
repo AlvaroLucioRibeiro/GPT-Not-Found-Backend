@@ -46,15 +46,17 @@ async def create_event(event_data: Dict[str, str]) -> Dict[str, str]:
     """
     query = """
         INSERT INTO events (customer_id, event_type, event_date, location, guest_count, duration_hours, budget_approved)
-        VALUES (%(customer_id)s, %(event_type)s, %(event_date)s, %(location)s, %(guest_count)s, %(duration_hours)s, %(budget_approved)s);
+        VALUES (%(customer_id)s, %(event_type)s, %(event_date)s, %(location)s, %(guest_count)s, %(duration_hours)s, %(budget_approved)s)
+        RETURNING id;
     """
 
     try:
         with connect() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(query, event_data)
+                new_event_id = cursor.fetchone()[0]
             conn.commit()
-        return {"message": "Event successfully created!"}
+        return {"message": "Event successfully created!", "event_id": new_event_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
