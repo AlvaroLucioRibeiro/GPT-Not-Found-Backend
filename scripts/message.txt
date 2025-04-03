@@ -1,4 +1,5 @@
-docs(backend_explanation): Updating documentation
+feat(github_actions): Updating git hub actions
 
-Updating documentation of the 
-backend.
+Updating git hub actions to have 
+new jobs. These new jobs are build
+and notify.
