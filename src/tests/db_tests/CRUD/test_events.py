@@ -13,7 +13,7 @@ BASE_EVENT_DATA = {
     "customer_id": 1005,
     "event_type": "wedding",  # updated in test_update_event_success
     "event_date": "2025-10-10T17:00:00",
-    "location": "Novo Espaço - BH",  # changed by update test
+    "location": "Sítio Paraíso",  # changed by update test
     "guest_count": 180,
     "duration_hours": 6,
     "budget_approved": True,
@@ -99,7 +99,7 @@ async def test_update_event_success():
     updated_data = {
         "event_type": "wedding",
         "event_date": "2025-11-11T19:00:00",
-        "location": "Novo Espaço - BH",
+        "location": "Sítio Paraíso",
         "guest_count": 180,
         "duration_hours": 6,
         "budget_approved": True,
