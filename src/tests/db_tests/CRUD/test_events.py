@@ -15,7 +15,7 @@ BASE_EVENT_DATA = {
     "event_date": "2025-10-10T17:00:00",
     "location": "Sítio Paraíso",  # changed by update test
     "guest_count": 250,
-    "duration_hours": 6,
+    "duration_hours": 7,
     "budget_approved": True,
 }
 
@@ -101,7 +101,7 @@ async def test_update_event_success():
         "event_date": "2025-11-11T19:00:00",
         "location": "Sítio Paraíso",
         "guest_count": 250,
-        "duration_hours": 6,
+        "duration_hours": 7,
         "budget_approved": True,
     }
 
