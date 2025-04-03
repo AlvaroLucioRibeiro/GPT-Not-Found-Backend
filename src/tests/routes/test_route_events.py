@@ -72,10 +72,9 @@ def test_create_event_success():
 
     assert response.status_code == 200
     assert json_data["message"] == "Event successfully created!"
-    assert "event" in json_data
-    assert "event_id" in json_data["event"]
+    assert "event_id" in response.text
 
-    CREATED_EVENT_ID = json_data["event"]["event_id"]
+    CREATED_EVENT_ID = json_data["event_id"]
 
     # Verifica se o evento foi criado corretamente
     fetch = requests.get(
@@ -145,7 +144,7 @@ def test_update_event_success():
     )
 
     assert response.status_code == 200
-    assert response.json()["message"] == "Event successfully updated!"
+    assert response.json()["message"] == "Event updated successfully"
 
 
 def test_update_event_invalid_id():

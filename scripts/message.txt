@@ -1,5 +1,4 @@
-feat(github_actions): Updating git hub actions
+tests(events_route): Updating tests
 
-Updating git hub actions to have 
-new jobs. These new jobs are build
-and notify.
+Updating tests dedicated
+to test route of events.
