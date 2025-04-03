@@ -1,4 +1,4 @@
-tests(customer_route): Tests for error responses
+feat(events_route): Route events updated
 
-Tests dedicated to error responses
-from API.
+Route of events updated due
+wrong response for API.
