@@ -1,4 +1,6 @@
-tests(events_route): Updating tests
+feat(routes): Add customer-related data endpoints
 
-Updating tests dedicated
-to test route of events.
+Implementing endpoints to retrieve events, 
+orders, payments, invoices and contracts by 
+customer ID. Includes proper error handling 
+with HTTPException for empty results.
