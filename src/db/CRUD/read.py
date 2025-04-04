@@ -426,3 +426,128 @@ async def get_contract_pdf(contract_id: int) -> Optional[Dict[str, str]]:
         return None
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_events_by_customer_id(customer_id: int) -> List[Dict[str, str]]:
+    """
+    Retrieves all events associated with a specific customer.
+
+    Args:
+        customer_id (int): Customer ID.
+
+    Returns:
+        List[Dict[str, str]]: List of events.
+    """
+    query = """
+        SELECT * FROM events WHERE customer_id = %s;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (customer_id,))
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_orders_by_customer_id(customer_id: int) -> List[Dict[str, str]]:
+    """
+    Retrieves all orders related to the customer's events.
+
+    Args:
+        customer_id (int): Customer ID.
+
+    Returns:
+        List[Dict[str, str]]: List of orders.
+    """
+    query = """
+        SELECT o.* FROM orders o
+        JOIN events e ON o.event_id = e.id
+        WHERE e.customer_id = %s;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (customer_id,))
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_payments_by_customer_id(customer_id: int) -> List[Dict[str, str]]:
+    """
+    Retrieves all payments related to the customer's orders.
+
+    Args:
+        customer_id (int): Customer ID.
+
+    Returns:
+        List[Dict[str, str]]: List of payments.
+    """
+    query = """
+        SELECT p.* FROM payments p
+        JOIN orders o ON p.order_id = o.id
+        JOIN events e ON o.event_id = e.id
+        WHERE e.customer_id = %s;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (customer_id,))
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_invoices_by_customer_id(customer_id: int) -> List[Dict[str, str]]:
+    """
+    Retrieves all invoices related to the customer's orders.
+
+    Args:
+        customer_id (int): Customer ID.
+
+    Returns:
+        List[Dict[str, str]]: List of invoices.
+    """
+    query = """
+        SELECT i.* FROM invoices i
+        JOIN orders o ON i.order_id = o.id
+        JOIN events e ON o.event_id = e.id
+        WHERE e.customer_id = %s;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (customer_id,))
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_contracts_by_customer_id(customer_id: int) -> List[Dict[str, str]]:
+    """
+    Retrieves all contracts related to a customer's events.
+
+    Args:
+        customer_id (int): Customer ID.
+
+    Returns:
+        List[Dict[str, str]]: List of contracts.
+    """
+    query = """
+        SELECT c.* FROM contracts c
+        JOIN events e ON c.event_id = e.id
+        WHERE e.customer_id = %s;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (customer_id,))
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
