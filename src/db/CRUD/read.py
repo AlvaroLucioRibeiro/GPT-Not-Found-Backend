@@ -145,8 +145,8 @@ async def get_all_orders() -> List[Dict[str, str]]:
         with connect() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(query)
-                orders = cursor.fetchall()
-        return orders
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
