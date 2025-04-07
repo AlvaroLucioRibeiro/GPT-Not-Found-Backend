@@ -130,20 +130,20 @@ async def create_product(product_data: Dict[str, str]) -> Dict[str, str]:
         product_data (Dict[str, str]): Dictionary containing the product details.
 
     Returns:
-        Dict[str, str]: Success message and created product ID.
+        Dict[str, str]: The created product details.
     """
     query = """
         INSERT INTO products (name, description, base_price, category, active)
         VALUES (%(name)s, %(description)s, %(base_price)s, %(category)s, %(active)s)
-        RETURNING id;
+        RETURNING *;
     """
     try:
         with connect() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(query, product_data)
-                product_id = cursor.fetchone()[0]
-            conn.commit()
-        return {"message": "Product created successfully!", "product_id": product_id}
+                new_product = cursor.fetchone()
+                columns = [desc[0] for desc in cursor.description]
+                return dict(zip(columns, new_product)) 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
