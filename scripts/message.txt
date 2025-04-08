@@ -1,6 +1,8 @@
-feat(routes): Add customer-related data endpoints
+test(routes): Add integration and unit tests for invoices
 
-Implementing endpoints to retrieve events, 
-orders, payments, invoices and contracts by 
-customer ID. Includes proper error handling 
-with HTTPException for empty results.
+Implemented integration tests for /invoices and 
+/invoices/download  routes covering success and 
+failure cases. Added unit tests for  
+get_invoice_by_order_id and get_invoice_pdf 
+functions to ensure correct behavior and proper 
+error handling.
