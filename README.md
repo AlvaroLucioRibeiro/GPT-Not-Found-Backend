@@ -1,7 +1,6 @@
 # C317 - GPT NOT FOUND
 
 ![Build Status](https://github.com/AlvaroLucioRibeiro/GPT-Not-Found-Backend/actions/workflows/Tests.yml/badge.svg)
-![Vercel Deployment](https://vercelbadge.vercel.app/api/alvaro-ribeiros-projects/gpt-not-found)
 ![Python](https://img.shields.io/badge/language-Python-yellow)
 ![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)
 
@@ -34,13 +33,9 @@ The project uses several technologies to ensure scalability, performance, and ma
 ---
 
 ## Deployment & Status
-The backend is hosted on **Vercel**, and the deployment status can be monitored via the badge below:
+The backend is hosted on **Vercel* and to access the documentation of production API, use the URL:
 
-![Vercel Deployment](https://vercelbadge.vercel.app/api/alvaro-ribeiros-projects/gpt-not-found)
-
-To access the production API, use the URL:
-
-https://gpt-not-found.vercel.app/api
+https://gpt-not-found.vercel.app/docs#
 
 ---
 
