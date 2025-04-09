@@ -29,14 +29,13 @@ The backend is structured as follows:
 ```mermaid
 graph TD;
     subgraph GPT-NOT-FOUND
-    
         C1[requirements.txt]
         C2[.gitignore]
         C3[vercel.json]
 
         subgraph .github
             subgraph workflows
-                Test.yml
+                Test[Test.yml]
             end
         end
 
@@ -44,7 +43,7 @@ graph TD;
             D1[create_and_activate_venv.sh]
             D2[send_email_notification.sh]
         end
-        
+
         subgraph docs
             B1[backend_architecture.md]
             B2[backend_documentation.md]
@@ -54,15 +53,14 @@ graph TD;
             A1[main.py]
             A2[__init__.py]
 
-            subgraph tests
-
+            subgraph src/tests
                 T3a[__init__.py]
 
-                subgraph db_tests
+                subgraph src/tests/db_tests
                     T1a[__init__.py]
                     T1b[db_base_test.py]
 
-                    subgraph CRUD
+                    subgraph src/tests/db_tests/CRUD
                         T11[__init__.py]
                         T12[test_contracts.py]
                         T13[test_customers.py]
@@ -72,10 +70,9 @@ graph TD;
                         T17[test_payments.py]
                         T18[test_products.py]
                     end
-
                 end
 
-                subgraph routes
+                subgraph src/tests/routes
                     T51[__init__.py]
                     T52[test_route_customer_data.py]
                     T53[test_route_customers.py]
@@ -88,22 +85,21 @@ graph TD;
                     T50[test_route_contracts.py]
                 end
 
-                subgraph utils
+                subgraph src/tests/utils
                     T4[utils.py]
                 end
 
-                subgraph utils_tests
+                subgraph src/tests/utils_tests
                     T2a[utils_test.py]
                 end
-
             end
 
-            subgraph db
+            subgraph src/db
                 DB1[db_base_classes.py]
                 DB2[db_sql_connection.py]
                 DB8[db_enums.py]
 
-                subgraph CRUD
+                subgraph src/db/CRUD
                     DB5[__init__.py]
                     DB3[create.py]
                     DB4[read.py]
@@ -112,12 +108,12 @@ graph TD;
                 end
             end
 
-            subgraph modules
+            subgraph src/modules
                 M2[__init__.py]
                 M1[modules_api.py]
             end
-            
-            subgraph routes
+
+            subgraph src/routes
                 R1[route_authentication.py]
                 R2[route_customers_me.py]
                 R3[route_customer_data.py]
@@ -128,8 +124,8 @@ graph TD;
                 R8[route_products.py]
                 R9[route_contracts.py]
             end
-            
-            subgraph utils
+
+            subgraph src/utils
                 U3[__init__.py]
                 U1[utils_token_auth.py]
                 U2[utils_validation.py]

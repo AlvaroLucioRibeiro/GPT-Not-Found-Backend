@@ -9,6 +9,8 @@ This document details the database structure, table relationships, and API route
 
 Below is the complete structure of the tables and their relationships.
 
+![schema_db_elo_drinks](./media/schema_db_elo_drinks.png)
+
 ### **1. Customers (`customers`)**
 Stores information about customers and administrators.
 
@@ -17,9 +19,9 @@ Stores information about customers and administrators.
 | `id`         | SERIAL PRIMARY KEY | Unique customer identifier |
 | `full_name`  | VARCHAR(255) NOT NULL | Full name of the customer |
 | `email`      | VARCHAR(255) UNIQUE NOT NULL | Customer email (used for login) |
-| `phone`      | VARCHAR(20) | Contact phone number |
+| `phone`      | VARCHAR(30) | Contact phone number |
 | `address`    | TEXT | Full address |
-| `cpf_cnpj`   | VARCHAR(20) UNIQUE NOT NULL | Customer's document number |
+| `cpf_cnpj`   | VARCHAR(30) UNIQUE NOT NULL | Customer's document number |
 | `password_hash` | VARCHAR(255) NOT NULL | Encrypted password (using bcrypt) |
 | `role`       | user_type DEFAULT 'customer' NOT NULL | Indicates if the user is a customer or an admin |
 | `created_at` | TIMESTAMP DEFAULT NOW() | Record creation timestamp |

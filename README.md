@@ -33,7 +33,7 @@ The project uses several technologies to ensure scalability, performance, and ma
 ---
 
 ## Deployment & Status
-The backend is hosted on **Vercel* and to access the documentation of production API, use the URL:
+The backend is hosted on **Vercel** and to access the documentation of production API, use the URL:
 
 https://gpt-not-found.vercel.app/docs#
 
@@ -43,6 +43,14 @@ https://gpt-not-found.vercel.app/docs#
 The project's folder and file architecture is detailed in a separate document. Refer to the file:
 
 [📂 Project Structure](./docs/backend_architecture.md)
+
+---
+
+## Running locally
+
+How to run this project locally is explained in this tutorial:
+
+[🚀 Running locally](./docs/backend_running_locally.md)
 
 ---
 

@@ -1,4 +1,5 @@
 docs(project): Updating documentation of project
 
-Updating project Updating due to 
-new architeture.
+Updating project to explain how
+to run locally. Also was fixed
+some problems in others explanations.
