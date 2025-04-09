@@ -1,8 +1,5 @@
-test(routes): Add integration and unit tests for invoices
+docs(project): Updating documentation of project
 
-Implemented integration tests for /invoices and 
-/invoices/download  routes covering success and 
-failure cases. Added unit tests for  
-get_invoice_by_order_id and get_invoice_pdf 
-functions to ensure correct behavior and proper 
-error handling.
+Updating project to explain how
+to run locally. Also was fixed
+some problems in others explanations.
