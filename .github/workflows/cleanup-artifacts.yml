@@ -1,7 +1,11 @@
 name: Cleanup Artifacts
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - develop
+      - '**'
 
 jobs:
   cleanup:
@@ -10,4 +14,4 @@ jobs:
       - name: Remove old artifacts
         uses: c-hive/gha-remove-artifacts@v1
         with:
-          age: '3 days'
+          age: '15 days'
