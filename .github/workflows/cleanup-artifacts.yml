@@ -1,4 +1,3 @@
-# .github/workflows/cleanup-artifacts.yml
 name: Cleanup Artifacts
 
 on:
