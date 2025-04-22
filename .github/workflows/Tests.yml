@@ -142,13 +142,3 @@ jobs:
         run: ./scripts/send_email_notification.sh
         env:
           EMAILS: ${{ secrets.EMAILS }}
-
-  cleanup-artifacts:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Remove old artifacts
-        uses: c-hive/gha-remove-artifacts@v1
-        with:
-          age: '3 days'
-
