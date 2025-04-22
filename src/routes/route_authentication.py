@@ -1,9 +1,9 @@
 from db.db_base_classes import Customer
 from db.CRUD.create import create_customer
 from db.CRUD.read import get_customer_by_email
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import APIRouter, HTTPException, status, Depends
 from utils.utils_token_auth import create_access_token
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException, status, Depends, Form
 from utils.utils_validation import (
     get_password_hash,
     validate_password_strength,
@@ -60,20 +60,23 @@ async def register(customer: Customer):
 
 
 @authentication_router.post("/login")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(
+    form_data: OAuth2PasswordRequestForm = Depends(), role: str = Form(...)
+):
     """
     Logs in a user and returns a JWT token.
 
     Args:
-        form_data (OAuth2PasswordRequestForm): The user credentials (email and password).
+        form_data (OAuth2PasswordRequestForm): The form data containing the user's email and password.
+        role (str): The expected role of the user ('customer', 'admin').
 
     Returns:
         dict: The access token and its type.
 
     Raises:
-        HTTPException: Raised if the email does not exist or if the password is incorrect.
+        HTTPException: Raised if the email does not exist, the password is incorrect,
+                       or the role does not match.
     """
-
     customer = await get_customer_by_email(form_data.username)
 
     if not customer:
@@ -86,6 +89,14 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid email or password"
         )
 
-    access_token = create_access_token(data={"sub": customer["email"]})
+    if role != customer["role"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied for this user type",
+        )
+
+    access_token = create_access_token(
+        data={"sub": customer["email"], "role": customer["role"]}
+    )
 
     return {"access_token": access_token, "token_type": "bearer"}
