@@ -71,6 +71,7 @@ def test_login_customer():
         data={
             "username": CUSTOMER_TEST_API["email"],
             "password": CUSTOMER_TEST_API["password_hash"],
+            "role": CUSTOMER_TEST_API["role"],
         },
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
@@ -97,6 +98,7 @@ def test_invalid_login():
         data={
             "username": CUSTOMER_TEST_API["email"],
             "password": "invalid_password",
+            "role": CUSTOMER_TEST_API["role"],
         },
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )

@@ -46,6 +46,7 @@ def authenticate_and_set_token():
         data={
             "username": customer_data["email"],
             "password": customer_data["password_hash"],
+            "role": customer_data["role"],
         },
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )

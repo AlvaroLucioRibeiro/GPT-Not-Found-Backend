@@ -54,6 +54,7 @@ def test_authenticate_user():
         data={
             "username": CUSTOMER_TEST_API["email"],
             "password": CUSTOMER_TEST_API["password_hash"],
+            "role": CUSTOMER_TEST_API["role"],
         },
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )

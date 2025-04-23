@@ -130,6 +130,7 @@ def test_get_customer_data_by_token():
         data={
             "username": CUSTOMER_TEST_API["email"],
             "password": CUSTOMER_TEST_API["password_hash"],
+            "role": CUSTOMER_TEST_API["role"],
         },
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
