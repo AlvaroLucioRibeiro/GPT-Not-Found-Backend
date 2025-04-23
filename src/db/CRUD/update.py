@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 from fastapi import HTTPException
 from db.db_sql_connection import connect
 
@@ -124,8 +124,11 @@ async def update_customer(
                 )
 
             conn.commit()
-        return {"message": "Customer successfully updated!", "customer": updated_customer}
-    
+        return {
+            "message": "Customer successfully updated!",
+            "customer": updated_customer,
+        }
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -187,7 +190,7 @@ async def update_product(
     Args:
         product_id (int): The product ID.
         product_data (Dict[str, str]): The updated product data.
-    
+
     Returns:
         Dict[str, str]: The updated product details.
     """
@@ -212,5 +215,44 @@ async def update_product(
                     raise HTTPException(status_code=404, detail="Product not found")
                 columns = [desc[0] for desc in cursor.description]
                 return dict(zip(columns, updated_product))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def update_order_item(order_item_id: int, data: Dict) -> Optional[Dict]:
+    """
+    Updates an existing order item in the order_items table.
+
+    Args:
+        order_item_id (int): The order item identifier.
+        data (Dict): Updated order item details.
+
+    Returns:
+        Optional[Dict]: The updated order item details or None if not found.
+
+    HttpException:
+        If an error occurs while updating data in the database.
+    """
+    query = """
+        UPDATE order_items
+        SET order_id = %(order_id)s,
+            product_id = %(product_id)s,
+            quantity = %(quantity)s,
+            unit_price = %(unit_price)s,
+            total_price = %(total_price)s
+        WHERE id = %(order_item_id)s
+        RETURNING *;
+    """
+    data["order_item_id"] = order_item_id
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, data)
+                updated = cursor.fetchone()
+                if not updated:
+                    return None
+                conn.commit()
+                columns = [desc[0] for desc in cursor.description]
+                return dict(zip(columns, updated))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
