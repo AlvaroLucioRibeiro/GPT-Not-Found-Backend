@@ -551,3 +551,78 @@ async def get_contracts_by_customer_id(customer_id: int) -> List[Dict[str, str]]
                 return [dict(zip(columns, row)) for row in cursor.fetchall()]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_order_items_by_customer_id(customer_id: int) -> List[Dict[str, str]]:
+    """
+    Retrieves all order_items associated with a specific customer.
+
+    Args:
+        customer_id (int): The customer ID.
+
+    Returns:
+        List[Dict[str, str]]: List of order_items.
+    """
+    query = """
+        SELECT oi.* FROM order_items oi
+        JOIN orders o ON oi.order_id = o.id
+        JOIN events e ON o.event_id = e.id
+        WHERE e.customer_id = %s;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (customer_id,))
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_order_item_by_id(order_item_id: int) -> Optional[Dict]:
+    """
+    Retrieves a specific order item by its ID.
+
+    Args:
+        order_item_id (int): The order item ID.
+
+    Returns:
+        Optional[Dict]: Order item details if found, otherwise None.
+
+    HttpException:
+        HTTPException: If an error occurs while fetching the order item.
+    """
+    query = "SELECT * FROM order_items WHERE id = %s;"
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (order_item_id,))
+                row = cursor.fetchone()
+                if row:
+                    columns = [desc[0] for desc in cursor.description]
+                    return dict(zip(columns, row))
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_order_items() -> List[Dict]:
+    """
+    Retrieves all order items from the database.
+
+    Returns:
+        List[Dict]: A list of dictionaries representing order items.
+
+    HttpException:
+        HTTPException: If an error occurs while fetching order items.
+    """
+    query = "SELECT * FROM order_items;"
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query)
+                rows = cursor.fetchall()
+                columns = [desc[0] for desc in cursor.description]
+                return [dict(zip(columns, row)) for row in rows]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

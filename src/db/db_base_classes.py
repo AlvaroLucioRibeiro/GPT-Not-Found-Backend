@@ -286,3 +286,75 @@ class Contract(BaseModel):
 
     event_id: int
     pdf_file: str
+
+
+class OrderItem(BaseModel):
+    """
+    Represents an item added to an order.
+
+    Attributes:
+        order_id (int): The ID of the associated order.
+        product_id (int): The ID of the product added to the order.
+        quantity (int): The quantity of the product.
+        unit_price (float): The unit price of the product.
+        total_price (float): The total price (quantity * unit_price).
+    """
+
+    order_id: int
+    product_id: int
+    quantity: int = Field(..., gt=0, description="Quantity must be greater than 0")
+    unit_price: float = Field(
+        ..., gt=0, description="Unit price must be greater than 0"
+    )
+    total_price: float = Field(
+        ..., gt=0, description="Total price must be greater than 0"
+    )
+
+    @field_validator("quantity")
+    @classmethod
+    def validate_quantity(cls, value: int) -> int:
+        """
+        Validates that the quantity is greater than zero.
+
+        Args:
+            value (int): The quantity of the product.
+
+        Returns:
+            int: The validated quantity.
+
+        Raises:
+            ValueError: If the quantity is not positive.
+        """
+        if value <= 0:
+            raise ValueError("Quantity must be greater than zero.")
+        return value
+
+    @field_validator("unit_price", "total_price")
+    @classmethod
+    def validate_prices(cls, value: float) -> float:
+        """
+        Validates that prices are positive.
+
+        Args:
+            value (float): The price value to validate.
+
+        Returns:
+            float: The validated price.
+
+        Raises:
+            ValueError: If the price is not greater than 0.
+        """
+        if value <= 0:
+            raise ValueError("Price must be greater than zero.")
+        return value
+
+
+class OrderItemOut(OrderItem):
+    """
+    Represents an order item returned by the API, including the item ID.
+
+    Attributes:
+        id (int): The ID of the order item.
+    """
+
+    id: int

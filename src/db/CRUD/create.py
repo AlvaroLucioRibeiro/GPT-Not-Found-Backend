@@ -143,7 +143,7 @@ async def create_product(product_data: Dict[str, str]) -> Dict[str, str]:
                 cursor.execute(query, product_data)
                 new_product = cursor.fetchone()
                 columns = [desc[0] for desc in cursor.description]
-                return dict(zip(columns, new_product)) 
+                return dict(zip(columns, new_product))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -180,3 +180,32 @@ async def create_contract(contract_data: Dict[str, str]) -> Dict[str, str]:
         raise HTTPException(
             status_code=500, detail=f"Error creating contract: {str(e)}"
         )
+
+
+async def create_order_item(data: Dict) -> Dict:
+    """
+    Inserts a new order item into the order_items table.
+
+    Args:
+        data (Dict): Dictionary containing the order item details.
+    
+    Returns:
+        Dict: Success message with order item ID.
+
+    HttpException:
+        HTTPException: If an error occurs while inserting the order item.
+    """
+    query = """
+        INSERT INTO order_items (order_id, product_id, quantity, unit_price, total_price)
+        VALUES (%(order_id)s, %(product_id)s, %(quantity)s, %(unit_price)s, %(total_price)s)
+        RETURNING id;
+    """
+    try:
+        with connect() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, data)
+                item_id = cursor.fetchone()[0]
+            conn.commit()
+        return {"message": "Order item created", "order_item_id": item_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

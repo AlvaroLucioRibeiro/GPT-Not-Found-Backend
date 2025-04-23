@@ -7,6 +7,7 @@ from db.CRUD.read import (
     get_payments_by_customer_id,
     get_invoices_by_customer_id,
     get_contracts_by_customer_id,
+    get_order_items_by_customer_id
 )
 
 customers_router_data = APIRouter(prefix="/customers", tags=["Customers Data"])
@@ -85,3 +86,19 @@ async def fetch_contracts_by_customer(
             status_code=404, detail="No contracts found for this customer."
         )
     return contracts
+
+
+@customers_router_data.get("/{customer_id}/order_items", response_model=List[Dict])
+async def fetch_order_items_by_customer(
+    customer_id: int = Path(..., gt=0), current_user: dict = Depends(get_current_user)
+):
+    """
+    Returns all order_items associated with the given customer ID.
+    """
+
+    items = await get_order_items_by_customer_id(customer_id)
+    if not items:
+        raise HTTPException(
+            status_code=404, detail="No order items found for this customer."
+        )
+    return items
