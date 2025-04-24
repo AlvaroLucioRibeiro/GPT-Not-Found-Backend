@@ -35,7 +35,7 @@ def connect():
             port=SUPABASE_PORT,
             database=SUPABASE_DATABASE,
         )
-        print("Connection established successfully.")
+        # print("Connection established successfully.")
         return connection
     except Exception as e:
         print(f"Error connecting to the database: {str(e)}")
