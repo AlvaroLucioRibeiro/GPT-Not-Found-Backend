@@ -76,26 +76,26 @@ jobs:
         run: |
           pytest --html=report.html --self-contained-html --cov=./ --cov-report=html --log-cli-level=INFO --log-file=logfile.log --log-file-level=DEBUG
 
-      - name: Upload of Test Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-report
-          path: report.html
+      # - name: Upload of Test Report
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: test-report
+      #     path: report.html
 
-      - name: Upload of Log File
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: logfile
-          path: logfile.log
+      # - name: Upload of Log File
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: logfile
+      #     path: logfile.log
 
-      - name: Upload of Coverage Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: ./htmlcov
+      # - name: Upload of Coverage Report
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: coverage-report
+      #     path: ./htmlcov
 
   build:
     runs-on: ubuntu-latest
