@@ -358,3 +358,37 @@ class OrderItemOut(OrderItem):
     """
 
     id: int
+
+
+class OrderItemCreate(BaseModel):
+    """
+    Represents the required data to create a new order item.
+
+    Attributes:
+        order_id (int): The ID of the associated order.
+        product_id (int): The ID of the product added to the order.
+        quantity (int): The quantity of the product.
+    """
+
+    order_id: int
+    product_id: int
+    quantity: int = Field(..., gt=0, description="Quantity must be greater than 0")
+
+    @field_validator("quantity")
+    @classmethod
+    def validate_quantity(cls, value: int) -> int:
+        """
+        Validates that the quantity is greater than zero.
+
+        Args:
+            value (int): The quantity of the product.
+
+        Returns:
+            int: The validated quantity.
+
+        Raises:
+            ValueError: If the quantity is not positive.
+        """
+        if value <= 0:
+            raise ValueError("Quantity must be greater than zero.")
+        return value
