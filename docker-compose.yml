@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  jenkins:
+    image: matheus/jenkins-custom:v1.0
+    container_name: jenkins-container
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - pipeline_network
+
+networks:
+  pipeline_network:
+
+volumes:
+  jenkins_home:
