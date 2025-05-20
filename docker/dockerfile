@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     unzip \
+    postgresql-client \
     && apt-get clean
 
 # Create a symbolic link for python3.11
