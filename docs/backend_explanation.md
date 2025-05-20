@@ -152,59 +152,59 @@ Contract generated for the company's and customer’s protection.
 
 ---
 
-## 🔹 API Routes Overview (Table Format)
+## 🔹 API Routes Overview
 
-| Method | Path                                       | Implemented | Tested |
-|--------|--------------------------------------------|-------------|--------|
-|**Authentication**| | | |
-| POST   | /auth/register                             | ✅          | ✅     |
-| POST   | /auth/login                                | ✅          | ✅     |
-| GET    | /customers/me                              | ✅          | ✅     |
+| Route | Method | Path                                       | Implemented | Tested |
+|-|--------|--------------------------------------------|-------------|--------|
+|**Authentication**| | | | |
+| | POST   | /auth/register                             | ✅          | ✅     |
+| | POST   | /auth/login                                | ✅          | ✅     |
+| | GET    | /customers/me                              | ✅          | ✅     |
 |**Customers**| | | |
-| GET    | /customers                                 | ✅          | ✅     |
-| POST   | /customers                                 | ✅          | ✅     |
-| GET    | /customers?customers_id={id}               | ✅          | ✅     |
-| PUT    | /customers?customers_id={id}               | ✅          | ✅     |
-| DELETE | /customers?customers_id={id}               | ✅          | ✅     |
+| | GET    | /customers                                 | ✅          | ✅     |
+| | POST   | /customers                                 | ✅          | ✅     |
+| | GET    | /customers?customers_id={id}               | ✅          | ✅     |
+| | PUT    | /customers?customers_id={id}               | ✅          | ✅     |
+| | DELETE | /customers?customers_id={id}               | ✅          | ✅     |
 |**Events**| | | |
-| GET    | /events                                    | ✅          | ✅     |
-| POST   | /events                                    | ✅          | ✅     |
-| GET    | /events?event_id={id}                      | ✅          | ✅     |
-| PUT    | /events?event_id={id}                      | ✅          | ✅     |
-| DELETE | /events?event_id={id}                      | ✅          | ✅     |
+| | GET    | /events                                    | ✅          | ✅     |
+| | POST   | /events                                    | ✅          | ✅     |
+| | GET    | /events?event_id={id}                      | ✅          | ✅     |
+| | PUT    | /events?event_id={id}                      | ✅          | ✅     |
+| | DELETE | /events?event_id={id}                      | ✅          | ✅     |
 |**Orders**| | | |
-| GET    | /orders                                    | ✅          | ✅     |
-| POST   | /orders                                    | ✅          | ✅     |
-| GET    | /orders?order_id={id}                      | ✅          | ✅     |
-| PUT    | /orders?order_id={id}                      | ✅          | ✅     |
-| DELETE | /orders?order_id={id}                      | ✅          | ✅     |
+| | GET    | /orders                                    | ✅          | ✅     |
+| | POST   | /orders                                    | ✅          | ✅     |
+| | GET    | /orders?order_id={id}                      | ✅          | ✅     |
+| | PUT    | /orders?order_id={id}                      | ✅          | ✅     |
+| | DELETE | /orders?order_id={id}                      | ✅          | ✅     |
 |**Products**| | | |
-| GET    | /products                                  | ✅          | ✅     |
-| POST   | /products                                  | ✅          | ✅     |
-| GET    | /products?product_id={id}                  | ✅          | ✅     |
-| PUT    | /products?product_id={id}                  | ✅          | ✅     |
-| DELETE | /products?product_id={id}                  | ✅          | ✅     |
+| | GET    | /products                                  | ✅          | ✅     |
+| | POST   | /products                                  | ✅          | ✅     |
+| | GET    | /products?product_id={id}                  | ✅          | ✅     |
+| | PUT    | /products?product_id={id}                  | ✅          | ✅     |
+| | DELETE | /products?product_id={id}                  | ✅          | ✅     |
 |**Payments**| | | |
-| POST   | /payments                                  | ✅          | ✅     |
-| GET    | /payments?payments_id={id}                 | ✅          | ✅     |
-| PUT    | /payments?payments_id={id}                 | ✅          | ✅     |
+| | POST   | /payments                                  | ✅          | ✅     |
+| | GET    | /payments?payments_id={id}                 | ✅          | ✅     |
+| | PUT    | /payments?payments_id={id}                 | ✅          | ✅     |
 |**Invoices**| | | |
-| GET    | /invoices?event_id={id}                    | ✅          | ✅     |
-| GET    | /invoices/download?invoice_id={id}         | ✅          | ✅     |
+| | GET    | /invoices?event_id={id}                    | ✅          | ✅     |
+| | GET    | /invoices/download?invoice_id={id}         | ✅          | ✅     |
 |**Contracts**| | | |
-| POST   | /contracts                                 | ✅          | ✅     |
-| GET    | /contracts?event_id={id}                   | ✅          | ✅     |
-| GET    | /contracts/download?contract_id={id}       | ✅          | ✅     |
+| | POST   | /contracts                                 | ✅          | ✅     |
+| | GET    | /contracts?event_id={id}                   | ✅          | ✅     |
+| | GET    | /contracts/download?contract_id={id}       | ✅          | ✅     |
 |**Order items**| | | |
-| GET    | /order_items                               | ✅          | ❌     |
-| POST   | /order_items                               | ✅          | ❌     |
-| GET    | /order_items?order_items={id}              | ✅          | ❌     |
-| PUT    | /order_items?order_items={id}              | ✅          | ❌     |
-| DELETE | /order_items?order_items={id}              | ✅          | ❌     |
+| | GET    | /order_items                               | ✅          | ❌     |
+| | POST   | /order_items                               | ✅          | ❌     |
+| | GET    | /order_items?order_items={id}              | ✅          | ❌     |
+| | PUT    | /order_items?order_items={id}              | ✅          | ❌     |
+| | DELETE | /order_items?order_items={id}              | ✅          | ❌     |
 |**Customer data**| | | |
-| GET    | /customers/{customer_id}/events            | ✅          | ✅     |
-| GET    | /customers/{customer_id}/orders            | ✅          | ✅     |
-| GET    | /customers/{customer_id}/payments          | ✅          | ✅     |
-| GET    | /customers/{customer_id}/invoices          | ✅          | ✅     |
-| GET    | /customers/{customer_id}/contracts         | ✅          | ✅     |
-| GET    | /customers/{customer_id}/order_items       | ✅          | ❌     |
+| | GET    | /customers/{customer_id}/events            | ✅          | ✅     |
+| | GET    | /customers/{customer_id}/orders            | ✅          | ✅     |
+| | GET    | /customers/{customer_id}/payments          | ✅          | ✅     |
+| | GET    | /customers/{customer_id}/invoices          | ✅          | ✅     |
+| | GET    | /customers/{customer_id}/contracts         | ✅          | ✅     |
+| | GET    | /customers/{customer_id}/order_items       | ✅          | ❌     |
