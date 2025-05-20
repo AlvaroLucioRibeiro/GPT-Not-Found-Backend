@@ -44,10 +44,30 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh '''#!/bin/bash
+                script {
+                    sh '''#!/bin/bash
                     . venv/bin/activate
-                    pytest -v
-                '''
+
+                    # Wait for PostgreSQL to be ready
+                    echo "Waiting for PostgreSQL to be ready..."
+                    until pg_isready -h postgres -p 5432 -U test_user; do
+                        sleep 2
+                    done
+
+                    # Create the test database
+                    export PGPASSWORD=test_password
+                    psql -h postgres -U test_user -d test_db -f database/tables.sql
+                    psql -h postgres -U test_user -d test_db -f database/base_data.sql
+
+                    # Run the tests
+                    SUPABASE_USER=test_user \
+                    SUPABASE_PASSWORD=test_password \
+                    SUPABASE_HOST=postgres \
+                    SUPABASE_PORT=5432 \
+                    SUPABASE_DATABASE=test_db \
+                    pytest --html=report.html --self-contained-html --cov=./ --cov-report=html
+                    '''
+                }
             }
         }
 
