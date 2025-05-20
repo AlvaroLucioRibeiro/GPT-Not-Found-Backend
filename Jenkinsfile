@@ -56,8 +56,6 @@ pipeline {
 
                     # Create the test database
                     export PGPASSWORD=test_password
-                    psql -h postgres -U test_user -d test_db -f database/01_tables.sql
-                    psql -h postgres -U test_user -d test_db -f database/02_base_data.sql
 
                     # Run the tests
                     SUPABASE_USER=test_user \
