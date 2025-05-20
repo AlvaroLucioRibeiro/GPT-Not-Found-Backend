@@ -4,6 +4,12 @@ FROM jenkins/jenkins:lts
 # root mode to install dependencies
 USER root
 
+# copy the plugins.txt file to the Jenkins home directory
+COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+
+# Install plugins listed in plugins.txt
+RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
+
 # Update the package list and install Docker, Python 3.11, and other dependencies
 RUN apt-get update && apt-get install -y \
     docker.io \
@@ -17,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && apt-get clean
 
-# Criar um link simbólico para o Python 3.11
+# Create a symbolic link for python3.11
 RUN python3.11 -m venv /opt/venv
 
 # Activate the virtual environment
