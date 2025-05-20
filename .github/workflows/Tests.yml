@@ -57,13 +57,13 @@ jobs:
         env:
           PGPASSWORD: test_password
         run: |
-          psql -h localhost -U test_user -d test_db -f database/tables.sql
+          psql -h localhost -U test_user -d test_db -f database/01_tables.sql
 
       - name: Criating test data
         env:
           PGPASSWORD: test_password
         run: |
-          psql -h localhost -U test_user -d test_db -f database/base_data.sql
+          psql -h localhost -U test_user -d test_db -f database/02_base_data.sql
 
       - name: Running tests with pytest
         env:
