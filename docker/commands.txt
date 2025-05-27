@@ -1,8 +1,0 @@
-- buildar a imagem:
-docker build -t matheus/jenkins-custom:v1.0 .
-
-- buildar o container:
-docker compose up --build
-
-- derrubar o container caso precise rebuildar:
-docker compose down -v
