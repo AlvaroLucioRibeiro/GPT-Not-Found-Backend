@@ -196,15 +196,15 @@ Contract generated for the company's and customer’s protection.
 | | GET    | /contracts?event_id={id}                   | ✅          | ✅     |
 | | GET    | /contracts/download?contract_id={id}       | ✅          | ✅     |
 |**Order items**| | | |
-| | GET    | /order_items                               | ✅          | ❌     |
-| | POST   | /order_items                               | ✅          | ❌     |
-| | GET    | /order_items?order_items={id}              | ✅          | ❌     |
-| | PUT    | /order_items?order_items={id}              | ✅          | ❌     |
-| | DELETE | /order_items?order_items={id}              | ✅          | ❌     |
+| | GET    | /order_items                               | ✅          | ✅     |
+| | POST   | /order_items                               | ✅          | ✅     |
+| | GET    | /order_items?order_items={id}              | ✅          | ✅     |
+| | PUT    | /order_items?order_items={id}              | ✅          | ✅     |
+| | DELETE | /order_items?order_items={id}              | ✅          | ✅     |
 |**Customer data**| | | |
 | | GET    | /customers/{customer_id}/events            | ✅          | ✅     |
 | | GET    | /customers/{customer_id}/orders            | ✅          | ✅     |
 | | GET    | /customers/{customer_id}/payments          | ✅          | ✅     |
 | | GET    | /customers/{customer_id}/invoices          | ✅          | ✅     |
 | | GET    | /customers/{customer_id}/contracts         | ✅          | ✅     |
-| | GET    | /customers/{customer_id}/order_items       | ✅          | ❌     |
+| | GET    | /customers/{customer_id}/order_items       | ✅          | ✅     |

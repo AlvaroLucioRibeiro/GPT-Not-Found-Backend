@@ -109,3 +109,11 @@ def test_fetch_customer_contracts():
     response = requests.get(CUSTOMER_DATA_ROUTE + "/contracts", headers=HEADERS)
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
+def test_fetch_customer_order_items():
+    """
+    Test fetching all order items associated with the given customer.
+    """
+    response = requests.get(CUSTOMER_DATA_ROUTE + "/order_items", headers=HEADERS)
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
