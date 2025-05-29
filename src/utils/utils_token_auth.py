@@ -15,33 +15,24 @@ load_dotenv()
 # configuration to generate token
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES") 
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 15))
 
 # Scheme to authenticate with JWT token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    """
-    Generates a JWT token.
-
-    Args:
-        data (dict): The payload data to encode in the token.
-        expires_delta (timedelta, optional): The expiration time of the token.
-
-    Returns:
-        str: The encoded JWT token.
-    """
     to_encode = data.copy()
+    
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-
+        expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    
     to_encode.update({"exp": expire})
-
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> Dict:
