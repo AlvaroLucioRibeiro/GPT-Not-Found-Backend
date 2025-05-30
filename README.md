@@ -9,8 +9,11 @@ This repository is dedicated to the first project of the **C317 - Special Topics
 ## Index
 - [Overview](#overview)
 - [Technologies Used](#technologies-used)
+- [Explanation of backend](#explanation-of-backend)
 - [Deployment & Status](#deployment--status)
 - [Project Structure](#project-structure)
+- [Running locally](#running-locally)
+- [Running Jenkins via docker](#running-jenkis-via-docker)
 - [Authors](#authors)
 
 ---
@@ -29,6 +32,14 @@ The project uses several technologies to ensure scalability, performance, and ma
 - ![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white) - Deployment platform used to host the application.
 - ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white) - Database used to store application data.
 - ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=github-actions&logoColor=white) - Tool for automation, testing, and CI/CD.
+
+---
+
+## Explanation of backend
+
+The explanation about how the database is struct and about how routes works:
+
+[🗒️ Explanation of backend](./docs/backend_explanation.md)
 
 ---
 
@@ -51,6 +62,14 @@ The project's folder and file architecture is detailed in a separate document. R
 How to run this project locally is explained in this tutorial:
 
 [🚀 Running locally](./docs/backend_running_locally.md)
+
+---
+
+## Running Jenkis via Docker
+
+If you want to run Jenkins to control your code, follow the steps in this file:
+
+[🤵‍♂️ Running Jenkis via Docker](./docs/backend_docker_jenkins.md)
 
 ---
 
