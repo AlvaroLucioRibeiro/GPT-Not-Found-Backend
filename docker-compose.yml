@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   jenkins:
-    image: matheus/jenkins-custom:v1.0
-    container_name: jenkins-container
+    image: matheushenriquefonsecaafonso/jenkins-custom:v1.0
+    container_name: jenkins-container-2
     ports:
       - "8080:8080"
       - "50000:50000"
@@ -16,7 +16,7 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: postgres-container
+    container_name: postgres-container-2
     environment:
       POSTGRES_USER: test_user
       POSTGRES_PASSWORD: test_password
@@ -27,14 +27,41 @@ services:
       - pipeline_network
     volumes:
       - ./database:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_logs:/var/log/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U test_user"]
       interval: 10s
       timeout: 5s
       retries: 5
+  
+  redis:
+    image: redis:alpine
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - pipeline_network
+
+  jupyter:
+    build:
+      context: ./docker/jupyter_notebook
+    container_name: jupyter-container
+    ports:
+      - "8888:8888"
+    volumes:
+      - jupyter_notebooks:/home/jovyan/work
+    networks:
+      - pipeline_network
 
 networks:
   pipeline_network:
 
 volumes:
   jenkins_home:
+  postgres_data:
+  postgres_logs:
+  redis_data:
+  jupyter_notebooks:
