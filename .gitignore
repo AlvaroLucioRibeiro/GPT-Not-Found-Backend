@@ -3,4 +3,4 @@ GPT404venv/
 .env
 .coverage
 GPT404venv
-docker/casc.yaml
+docker/jenkins/casc.yaml
