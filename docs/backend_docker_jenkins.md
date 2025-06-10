@@ -35,7 +35,7 @@ It provides a fully functional CI/CD environment with Jenkins + Docker + Postgre
 Run the command below inside the `docker/` folder to build the custom Jenkins image:
 
 ```bash
-docker build -t matheus/jenkins-custom:v1.0 .
+docker build -t matheushenriquefonsecaafonso/jenkins-custom:v1.0 .
 ```
 
 ---
